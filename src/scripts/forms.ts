@@ -1,6 +1,7 @@
 import flatpickr from 'flatpickr';
 import { Portuguese } from 'flatpickr/dist/l10n/pt';
 import 'flatpickr/dist/flatpickr.min.css';
+import { keyMap } from './lead-payload';
 
 function applyPhoneMask(input: HTMLInputElement) {
   input.addEventListener('input', () => {
@@ -128,7 +129,7 @@ export function initForms() {
       let fonteBase = rawData['fonte'] || project;
       Object.entries(rawData).forEach(([key, val]) => {
         if (key === 'fonte') return;
-        const capKey = key.charAt(0).toUpperCase() + key.slice(1);
+        const capKey = keyMap[key] ?? (key.charAt(0).toUpperCase() + key.slice(1));
         capitalizedFields[capKey] = val;
       });
 
