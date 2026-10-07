@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Elago Eventos | Link"
+  description="Elago Eventos — Um cenário que transforma a experiência de celebrar."
+  canonical="https://elago.com.br/bio"
+  noIndex={true}
+>
+  <Fragment slot="head">
+    <meta name="theme-color" content="#1E3700" />
+    <link rel="stylesheet" href="https://use.typekit.net/cwh2gwf.css" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --cor-verde: #1E3700;
+        --cor-bege: #D1BD9D;
+        --cor-branco: #F4F0E6;
+        --fonte: "orpheuspro", Georgia, serif;
+      }
+
+      html, body {
+        height: 100%;
+        font-family: var(--fonte);
+        background: var(--cor-verde);
+        color: var(--cor-branco);
+      }
+
+      .bio-wrap {
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+        padding: 2.5rem 1.5rem 3rem;
+        overflow: hidden;
+      }
+
+      .bio-bg {
+        position: absolute;
+        inset: 0;
+        background-image: url('https://media.dmove.com.br/clients/elago/photos/A%C3%A9rea_-_08.webp');
+        background-size: cover;
+        background-position: center 30%;
+        filter: brightness(0.55);
+        z-index: 0;
+      }
+
+      .bio-content {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 420px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .bio-logo {
+        width: 160px;
+        filter: brightness(0) invert(1);
+      }
+
+      .bio-tagline {
+        font-size: clamp(1.05rem, 4vw, 1.2rem);
+        font-weight: 400;
+        font-style: italic;
+        color: var(--cor-bege);
+        text-align: center;
+        line-height: 1.5;
+        letter-spacing: 0.01em;
+      }
+
+      .bio-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        width: 100%;
+      }
+
+      .bio-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 100%;
+        padding: 0.9rem 1.5rem;
+        border: 1.5px solid var(--cor-bege);
+        border-radius: 4px;
+        background: transparent;
+        color: var(--cor-branco);
+        font-family: var(--fonte);
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .bio-btn:hover,
+      .bio-btn:focus-visible {
+        background: var(--cor-bege);
+        color: var(--cor-verde);
+      }
+
+      .bio-btn svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        fill: currentColor;
+      }
+
+      .bio-footer {
+        position: relative;
+        z-index: 1;
+        margin-top: 2rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        color: rgba(244,240,230,0.4);
+        text-align: center;
+      }
+    </style>
+  </Fragment>
+
+  <div class="bio-wrap">
+    <div class="bio-bg" aria-hidden="true"></div>
+
+    <div class="bio-content">
+      <img
+        src="/imagens/elago-logo.svg"
+        alt="Elago Eventos"
+        class="bio-logo"
+        width="160"
+        height="46"
+      />
+
+      <p class="bio-tagline">Um cenário que transforma<br>a experiência de celebrar</p>
+
+      <nav class="bio-links" aria-label="Links">
+        <!-- Site -->
+        <a href="https://elago.com.br/" class="bio-btn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2c.55 0 1.42.6 2.23 2H9.77C10.58 6.6 11.45 4 12 4zm-3.1.6A11.5 11.5 0 0 0 7.07 8H4.26A8.04 8.04 0 0 1 8.9 4.6zm6.2 0A8.04 8.04 0 0 1 19.74 8h-2.81a11.5 11.5 0 0 0-1.83-3.4zM4 10h3.07a13.6 13.6 0 0 0-.07 2c0 .68.03 1.35.1 2H4.26A8 8 0 0 1 4 12c0-.68.09-1.35.26-2zm5.07 0h5.86c.07.65.07 1.34.07 2s0 1.35-.07 2H9.07A13.2 13.2 0 0 1 9 12c0-.66.03-1.35.07-2zm7.86 0H20a7.97 7.97 0 0 1 0 4h-2.83c.07-.65.1-1.32.1-2 0-.66-.04-1.35-.1-2zm-7.16 6h4.46c-.81 1.4-1.68 2-2.23 2s-1.42-.6-2.23-2zm-2.84 0h1.97c.4.9.88 1.67 1.46 2.3A8.04 8.04 0 0 1 7 16zm8.57 0h1.97a8.04 8.04 0 0 1-3.43 2.3c.58-.63 1.06-1.4 1.46-2.3z"/></svg>
+          Conheça o espaço
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/elagoeventos/" class="bio-btn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          Instagram
+        </a>
+
+        <!-- Maps -->
+        <a
+          href="https://www.google.com/maps/dir/?api=1&destination=-20.8852727,-49.2975024"
+          class="bio-btn"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+          Como chegar
+        </a>
+      </nav>
+    </div>
+
+    <p class="bio-footer">Elago Eventos &copy; {new Date().getFullYear()}</p>
+  </div>
+</Base>
