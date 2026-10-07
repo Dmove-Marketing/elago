@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import config from '../../config.json';
 import '../styles/eventos-corporativos.css';
-const webhookUrl = (config.forms as any)?.corporativo?.webhooks?.[0] || '';
+const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 ---
 
 <Base
@@ -329,10 +329,6 @@ const webhookUrl = (config.forms as any)?.corporativo?.webhooks?.[0] || '';
       data-success-id="form-orcamento-ok"
     >
       <div class="campo inteiro">
-        <label for="empresa">Nome da empresa</label>
-        <input id="empresa" name="empresa" type="text" autocomplete="organization" required>
-      </div>
-      <div class="campo inteiro">
         <label for="nome">Nome</label>
         <input id="nome" name="nome" type="text" autocomplete="name" required>
       </div>
@@ -346,15 +342,35 @@ const webhookUrl = (config.forms as any)?.corporativo?.webhooks?.[0] || '';
       </div>
       <div class="campo inteiro">
         <label for="tipo_evento">Tipo de evento</label>
-        <input id="tipo_evento" name="tipo_evento" type="text" placeholder="Ex.: confraternização, congresso" required>
+        <select id="tipo_evento" name="tipo_evento" required>
+          <option value="" disabled selected>Selecione o tipo de evento</option>
+          <option value="Aniversario">Aniversário</option>
+          <option value="Aniversario debutante">Aniversário debutante</option>
+          <option value="Bodas">Bodas</option>
+          <option value="Casamento">Casamento</option>
+          <option value="Confraternizacao corporativa">Confraternização corporativa</option>
+          <option value="Confraternizacao social">Confraternização social</option>
+          <option value="Corporativo">Corporativo</option>
+          <option value="Feiras e Exposicoes">Feiras e Exposições</option>
+          <option value="Masterclass e Palestras">Masterclass e Palestras</option>
+          <option value="Mentorias e Treinamentos">Mentorias e Treinamentos</option>
+          <option value="Offsite corporativo">Offsite corporativo</option>
+          <option value="Reunioes de Networking">Reuniões de Networking</option>
+          <option value="Workshops, Conferencias e Seminarios">Workshops, Conferências e Seminários</option>
+          <option value="Outros">Outros</option>
+        </select>
       </div>
       <div class="campo">
         <label for="data_evento">Data do evento</label>
-        <input id="data_evento" name="data_evento" type="date" required>
+        <input id="data_evento" name="data_evento" type="text" data-datepicker autocomplete="off" placeholder="dd/mm/aaaa" required>
       </div>
       <div class="campo">
         <label for="convidados">Número de convidados</label>
-        <input id="convidados" name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex.: 300" required>
+        <input id="convidados" name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex.: 150" required>
+      </div>
+      <div class="campo inteiro">
+        <label for="detalhes_adicionais">Detalhes do evento <span class="hint">(não obrigatório)</span></label>
+        <textarea id="detalhes_adicionais" name="detalhes_adicionais" rows="3" placeholder="Conte um pouco mais sobre o seu evento"></textarea>
       </div>
       <input type="text" name="website" tabindex="-1" style="display:none;position:absolute" aria-hidden="true" autocomplete="off">
       <button class="btn btn-escuro" type="submit">Solicitar Orçamento</button>

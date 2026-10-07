@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import '../styles/bio.css';
 import config from '../../config.json';
-const webhookUrl = config.forms['lead-form'].webhooks[0];
+const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 ---
 <Base
   title="Elago Eventos | Link"
@@ -71,6 +71,34 @@ const webhookUrl = config.forms['lead-form'].webhooks[0];
           </div>
           <div class="bio-campo">
             <input name="email" type="email" placeholder="E-mail" autocomplete="email" required />
+          </div>
+          <div class="bio-campo">
+            <select name="tipo_evento" required>
+              <option value="" disabled selected>Tipo de evento</option>
+              <option value="Aniversario">Aniversário</option>
+              <option value="Aniversario debutante">Aniversário debutante</option>
+              <option value="Bodas">Bodas</option>
+              <option value="Casamento">Casamento</option>
+              <option value="Confraternizacao corporativa">Confraternização corporativa</option>
+              <option value="Confraternizacao social">Confraternização social</option>
+              <option value="Corporativo">Corporativo</option>
+              <option value="Feiras e Exposicoes">Feiras e Exposições</option>
+              <option value="Masterclass e Palestras">Masterclass e Palestras</option>
+              <option value="Mentorias e Treinamentos">Mentorias e Treinamentos</option>
+              <option value="Offsite corporativo">Offsite corporativo</option>
+              <option value="Reunioes de Networking">Reuniões de Networking</option>
+              <option value="Workshops, Conferencias e Seminarios">Workshops, Conferências e Seminários</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+          <div class="bio-campo">
+            <input name="data_evento" type="text" data-datepicker autocomplete="off" placeholder="Data do evento (dd/mm/aaaa)" required />
+          </div>
+          <div class="bio-campo">
+            <input name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Número de convidados" required />
+          </div>
+          <div class="bio-campo">
+            <textarea name="detalhes_adicionais" rows="3" placeholder="Detalhes do evento (não obrigatório)"></textarea>
           </div>
           <input type="text" name="website" tabindex="-1" style="display:none;position:absolute" aria-hidden="true" autocomplete="off" />
           <button type="submit" class="bio-btn-submit">

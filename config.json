@@ -13,7 +13,18 @@
       "preset": "social",
       "redirect_on_success": "",
       "webhooks": [
-        "https://n8n.dmove.com.br/webhook/elago"
+        "https://server3n8n.dmove.com.br/webhook/elago-site"
+      ],
+      "fields_required": [
+        "nome",
+        "telefone",
+        "email"
+      ]
+    },
+    "lead-form-eventos": {
+      "id": "lead-form",
+      "webhooks": [
+        "https://server3n8n.dmove.com.br/webhook/elago-eventos"
       ],
       "fields_required": [
         "nome",
@@ -23,7 +34,7 @@
     },
     "corporativo": {
       "id": "form-orcamento",
-      "webhooks": ["https://n8n.dmove.com.br/webhook/elago-corporativo"],
+      "webhooks": ["https://server3n8n.dmove.com.br/webhook/elago-eventos"],
       "fields_required": ["empresa", "nome", "telefone", "email", "tipo_evento", "data_evento", "convidados"]
     }
   },
