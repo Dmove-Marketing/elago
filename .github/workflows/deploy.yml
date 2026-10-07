@@ -35,9 +35,36 @@ jobs:
       - name: Configure nginx vhost
         run: |
           DOMAIN=$(node -e "const c=require('./config.json'); console.log(c.deploy.remote_path.split('/').pop())")
+
+          # Copia nosso config para o servidor
           scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             server/nginx.conf \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/etc/nginx/sites-available/$DOMAIN
+
+          # No servidor: remove o domínio de outros configs, cria symlink e recarrega
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/$DOMAIN && nginx -t && systemctl reload nginx"
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} bash -s << EOF
+              set -e
+              DOMAIN=$DOMAIN
+
+              echo "=== Configs que referenciam \$DOMAIN ==="
+              grep -rl "\$DOMAIN" /etc/nginx/sites-enabled/ 2>/dev/null || echo "(nenhum)"
+
+              # Remove elago.com.br de qualquer outro config (deixa apenas o nosso)
+              for f in \$(grep -rl "\$DOMAIN" /etc/nginx/sites-enabled/ 2>/dev/null); do
+                if [ "\$(basename \$f)" != "\$DOMAIN" ]; then
+                  echo "Removendo \$DOMAIN de \$f"
+                  sed -i "s/[[:space:]]*\$DOMAIN[[:space:]]*/\t/g" "\$f"
+                fi
+              done
+
+              # Cria/atualiza symlink do nosso vhost
+              ln -sf /etc/nginx/sites-available/\$DOMAIN /etc/nginx/sites-enabled/\$DOMAIN
+
+              echo "=== nginx -t ==="
+              nginx -t
+
+              echo "=== reload nginx ==="
+              systemctl reload nginx
+              echo "OK"
+EOF
