@@ -29,10 +29,11 @@
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  margin:0;background:var(--cor-branco);color:var(--cor-texto);
+  margin:0;background:var(--cor-branco);
   font-family:var(--fonte-texto);font-weight:400;font-size:19px;line-height:1.36;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
+html body{color:var(--cor-texto);background:var(--cor-branco)}
 img,video,svg{display:block;max-width:100%}
 a{color:inherit}
 button{font:inherit;cursor:pointer}
@@ -361,6 +362,7 @@ p{margin:0}
 .form-contato input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .form-contato .btn{grid-column:1 / -1;margin-top:8px;width:100%;padding:20px 34px;border:0}
 .form-contato .aviso{grid-column:1 / -1;font-size:14px;line-height:1.28;color:var(--cor-texto-suave);text-align:center}
+#form-orcamento-ok.active{display:flex !important;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:40px}
 
 /* =========================================================
    RODAPÉ

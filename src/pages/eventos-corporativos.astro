@@ -325,6 +325,7 @@ const webhookUrl = (config.forms as any)?.corporativo?.webhooks?.[0] || '';
       data-form-id="form-orcamento"
       data-submit-url={webhookUrl}
       data-project="elago"
+      data-grid-id="form-orcamento"
       data-success-id="form-orcamento-ok"
     >
       <div class="campo inteiro">
@@ -360,7 +361,7 @@ const webhookUrl = (config.forms as any)?.corporativo?.webhooks?.[0] || '';
       <p class="aviso">Seus dados serão usados apenas para o retorno da equipe Elago.</p>
     </form>
 
-    <div id="form-orcamento-ok" hidden style="grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:40px">
+    <div id="form-orcamento-ok" hidden style="grid-column:2">
       <h3 style="font-family:var(--fonte-titulo);font-size:clamp(24px,3vw,36px);color:var(--cor-verde)">Mensagem enviada!</h3>
       <p style="color:var(--cor-texto)">Em breve nossa equipe entrará em contato para apresentar as opções e enviar o orçamento.</p>
     </div>

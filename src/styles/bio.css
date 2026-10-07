@@ -1,0 +1,216 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+}
+
+.bio-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #1E3700;
+  color: #F4F0E6;
+  font-family: "orpheuspro", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ——— Hero ——— */
+.bio-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 2.5rem 1.5rem 3rem;
+  overflow: hidden;
+}
+
+.bio-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://media.dmove.com.br/clients/elago/photos/A%C3%A9rea_-_08.webp');
+  background-size: cover;
+  background-position: center 30%;
+  z-index: 0;
+}
+
+.bio-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(30,55,0,.35) 0%,
+    rgba(30,55,0,.55) 55%,
+    rgba(30,55,0,.92) 90%,
+    #1E3700 100%
+  );
+}
+
+.bio-branding {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+.bio-logo {
+  width: 150px;
+  filter: brightness(0) invert(1);
+}
+
+.bio-tagline {
+  font-size: clamp(1rem, 4vw, 1.15rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #D1BD9D;
+  text-align: center;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+}
+
+/* ——— CTAs ——— */
+.bio-links-section {
+  padding: 0 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bio-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+.bio-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  border: 1.5px solid #D1BD9D;
+  border-radius: 4px;
+  background: transparent;
+  color: #F4F0E6;
+  font-family: "orpheuspro", Georgia, serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bio-btn:hover,
+.bio-btn:focus-visible {
+  background: #D1BD9D;
+  color: #1E3700;
+}
+
+.bio-btn svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+/* ——— Formulário ——— */
+.bio-form-section {
+  padding: 2rem 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid rgba(209,189,157,.2);
+}
+
+.bio-form-wrap {
+  width: 100%;
+  max-width: 420px;
+}
+
+.bio-form-titulo {
+  font-size: 1.05rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #D1BD9D;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.01em;
+}
+
+.bio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.bio-campo input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(209,189,157,.45);
+  border-radius: 4px;
+  background: rgba(244,240,230,.06);
+  color: #F4F0E6;
+  font-family: "orpheuspro", Georgia, serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+
+.bio-campo input::placeholder {
+  color: rgba(244,240,230,.4);
+}
+
+.bio-campo input:focus {
+  border-color: #D1BD9D;
+}
+
+.bio-form .bio-btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background: #D1BD9D;
+  color: #1E3700;
+  font-family: "orpheuspro", Georgia, serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bio-form .bio-btn-submit:hover {
+  background: #F4F0E6;
+}
+
+.bio-form .bio-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ——— Rodapé ——— */
+.bio-footer {
+  padding: 1rem 1.5rem 2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: rgba(244,240,230,.35);
+  text-align: center;
+}
