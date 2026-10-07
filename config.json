@@ -20,6 +20,11 @@
         "telefone",
         "email"
       ]
+    },
+    "corporativo": {
+      "id": "form-orcamento",
+      "webhooks": ["https://n8n.dmove.com.br/webhook/elago-corporativo"],
+      "fields_required": ["empresa", "nome", "telefone", "email", "tipo_evento", "data_evento", "convidados"]
     }
   },
   "whatsapp": {

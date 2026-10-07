@@ -1,0 +1,575 @@
+---
+import Base from '../layouts/Base.astro';
+import config from '../../config.json';
+import '../styles/eventos-corporativos.css';
+const webhookUrl = (config.forms as any)?.corporativo?.webhooks?.[0] || '';
+---
+
+<Base
+  title="Eventos Corporativos em Cedral | Elago"
+  description="Complexo de eventos em Cedral (SP) com salão para até 1.100 pessoas, área externa, varanda gourmet, casa exclusiva, lago e bosque. Solicite um orçamento para o evento da sua empresa."
+  ogImage="/imagens/elago-corporativo-hero.jpg"
+  canonical="https://elago.com.br/eventos-corporativos"
+>
+  <Fragment slot="head">
+    <meta name="theme-color" content="#1E3700" />
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin />
+    <link rel="stylesheet" href="https://use.typekit.net/cwh2gwf.css" />
+  </Fragment>
+
+<!-- ===================== HEADER ===================== -->
+<header class="site-header" id="cabecalho">
+  <div class="wrap">
+    <a class="logo" href="#topo" aria-label="Elago — voltar ao topo">
+      <img src="/imagens/elago-logo.svg" alt="Elago" width="101" height="40">
+    </a>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="topo">
+  <div class="midia-fundo">
+    <img src="/imagens/elago-corporativo-hero.jpg" alt="Vista aérea noturna do complexo Elago, com salão, piscina e áreas verdes em Cedral (SP)" width="2400" height="1350" fetchpriority="high">
+  </div>
+  <div class="wrap conteudo-hero">
+    <p class="sobretitulo">Eventos corporativos <span aria-hidden="true"></span> Cedral</p>
+    <h1>Natureza e versatilidade <br class="quebra-desktop">para encontros que vão <span class="destaque">além da sala de reunião</span></h1>
+    <a class="btn btn-claro" href="#contato">Solicite orçamento</a>
+  </div>
+</section>
+
+<!-- ===================== AUTORIDADE ===================== -->
+<section class="autoridade" id="autoridade" aria-label="Destaques do Elago">
+  <div class="wrap">
+    <ul>
+      <li style="--i:0"><span>De <strong><span class="contador" data-alvo="250">250</span> a <span class="contador" data-alvo="1100">1.100</span></strong> convidados</span></li>
+      <li style="--i:1"><span>Estrutura versátil</span></li>
+      <li style="--i:2"><span>Integração com a natureza</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== CONCEITO ===================== -->
+<section class="secao conceito" id="conceito">
+  <div class="wrap grid-conceito">
+    <div class="texto-conceito reveal">
+      <span class="rotulo">Conceito</span>
+      <h2 class="titulo-secao">Mais possibilidades para a agenda da sua empresa</h2>
+      <p>No Elago, o espaço acompanha a proposta do evento. O complexo reúne salão principal, área externa, área gourmet, piscina, lago e bosque, permitindo diferentes configurações para encontros corporativos, confraternizações, lançamentos, feiras, congressos, treinamentos e outros formatos.</p>
+    </div>
+    <div class="moldura-video reveal" data-atraso="1">
+      <div class="video-arco">
+        <video id="video-conceito" autoplay muted loop playsinline preload="metadata" poster="/imagens/elago-conceito-poster.jpg" aria-label="Vídeo institucional do Elago: fachada, salão, lago e áreas externas">
+          <source src="/videos/elago-corporativo-conceito.mp4" type="video/mp4">
+        </video>
+        <button class="btn-som" type="button" aria-pressed="false" aria-label="Ativar som do vídeo">
+          <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z"/><path d="m16.5 14.5 5-5"/><path d="m16.5 9.5 5 5"/></svg>
+          <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></svg>
+          <span class="txt-som">Ativar som</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESPAÇOS ===================== -->
+<section class="secao espacos escuro" id="espacos">
+  <div class="wrap">
+    <div class="cabecalho-secao reveal">
+      <span class="rotulo">Espaços</span>
+      <h2 class="titulo-secao"><span>Diferentes ambientes.</span> <span class="destaque">Uma estrutura que se adapta.</span></h2>
+    </div>
+
+    <div class="grid-espacos">
+      <article class="espaco reveal">
+        <div class="arco"><img src="/imagens/elago-espaco-salao-principal.jpg" alt="Salão principal do Elago, amplo, com colunas e janelas em arco" width="1600" height="1067" loading="lazy" style="object-position:50% 50%"></div>
+        <div class="numero">01</div>
+        <h3>Salão principal</h3>
+        <p>Com capacidade para até 600 pessoas sentadas ou 1.100 em pé, o salão oferece amplitude para diferentes formatos e configurações de eventos corporativos.</p>
+      </article>
+      <article class="espaco reveal" data-atraso="1">
+        <div class="arco"><img src="/imagens/elago-espaco-area-externa.jpg" alt="Área externa do Elago com fachada em arcos e piso de pedra ao entardecer" width="1600" height="1200" loading="lazy" style="object-position:62% 50%"></div>
+        <div class="numero">02</div>
+        <h3>Área externa</h3>
+        <p>Integrada ao entorno natural e com capacidade para até 250 pessoas, é uma alternativa para recepções, confraternizações, encontros e eventos que pedem uma atmosfera mais aberta.</p>
+      </article>
+      <article class="espaco reveal" data-atraso="2">
+        <div class="arco"><img src="/imagens/elago-espaco-varanda-gourmet.jpg" alt="Varanda gourmet do Elago com piscina iluminada e espreguiçadeiras" width="1600" height="1067" loading="lazy" style="object-position:58% 50%"></div>
+        <div class="numero">03</div>
+        <h3>Varanda gourmet</h3>
+        <p>Um ambiente que pode ser contratado de forma independente ou integrado ao complexo, ampliando as possibilidades de configuração do evento.</p>
+      </article>
+      <article class="espaco reveal" data-atraso="3">
+        <div class="arco"><img src="/imagens/elago-espaco-casa-exclusiva.jpg" alt="Sala de estar da casa exclusiva do Elago, com mezanino e janelas para o jardim" width="1600" height="1067" loading="lazy" style="object-position:38% 50%"></div>
+        <div class="numero">04</div>
+        <h3>Casa exclusiva</h3>
+        <p>Espaço reservado para encontros corporativos que valorizam privacidade, conforto e uma experiência diferenciada.</p>
+      </article>
+    </div>
+    <p class="dica-arraste" aria-hidden="true">Arraste para ver os ambientes</p>
+  </div>
+</section>
+
+<!-- ===================== EVENTOS ===================== -->
+<section class="secao eventos" id="eventos">
+  <div class="wrap">
+    <div class="cabecalho-secao reveal">
+      <span class="rotulo">Eventos</span>
+      <h2 class="titulo-secao">Versatilidade para diferentes objetivos corporativos</h2>
+    </div>
+    <ul class="grid-eventos">
+      <li class="evento reveal">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></svg></span>
+        <span>Lançamentos de produtos</span>
+      </li>
+      <li class="evento reveal" data-atraso="1">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/></svg></span>
+        <span>Feiras</span>
+      </li>
+      <li class="evento reveal" data-atraso="2">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 13h4a2 2 0 0 0 1.901-1.38l1.057-4.333A1 1 0 0 0 21 6H3a1 1 0 0 0-.958 1.287L3.1 11.621A2 2 0 0 0 5.001 13h4"/><path d="M15 22V11a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11"/><path d="M18 22H6"/><path d="M18 6V3a1 1 0 0 0-1-1h-3"/></svg></span>
+        <span>Congressos</span>
+      </li>
+      <li class="evento reveal" data-atraso="3">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></svg></span>
+        <span>Confraternizações</span>
+      </li>
+      <li class="evento reveal">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg></span>
+        <span>Workshops e treinamentos</span>
+      </li>
+      <li class="evento reveal" data-atraso="1">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg></span>
+        <span>Eventos de relacionamento</span>
+      </li>
+      <li class="evento reveal" data-atraso="2">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"/><path d="M8 6v8"/></svg></span>
+        <span>Ativações de marca</span>
+      </li>
+      <li class="evento reveal" data-atraso="3">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/><path d="M5 21h14"/></svg></span>
+        <span>Atividades e eventos wellness</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== CLIENTES ===================== -->
+<section class="secao clientes" id="clientes">
+  <div class="wrap">
+    <div class="cabecalho-secao reveal">
+      <span class="rotulo">Clientes</span>
+      <h2 class="titulo-secao">Conheça as grandes marcas que já passaram por aqui</h2>
+    </div>
+    <div class="logos-trilho reveal" data-atraso="1">
+      <div class="logos-faixa">
+        <ul class="logos-clientes">
+      <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="Tereos" width="873" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-ram.png" alt="RAM" width="221" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="Grupo Lukma Electric" width="811" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="Rio Preto Country Bulls" width="260" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="Kelvin Sistema de Ensino" width="298" height="98" loading="lazy"></li>
+    </ul>
+        <ul class="logos-clientes" aria-hidden="true">
+      <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="" width="873" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-ram.png" alt="" width="221" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="" width="811" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="" width="260" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="" width="298" height="98" loading="lazy"></li>
+    </ul>
+        <ul class="logos-clientes" aria-hidden="true">
+      <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="" width="873" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-ram.png" alt="" width="221" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="" width="811" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="" width="260" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="" width="298" height="98" loading="lazy"></li>
+    </ul>
+        <ul class="logos-clientes" aria-hidden="true">
+      <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="" width="873" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-ram.png" alt="" width="221" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="" width="811" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="" width="260" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="" width="298" height="98" loading="lazy"></li>
+    </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DEPOIMENTOS ===================== -->
+<section class="secao depoimentos" id="depoimentos">
+  <div class="wrap">
+    <div class="topo-depoimentos">
+      <div class="reveal">
+        <span class="rotulo">Depoimentos</span>
+        <h2 class="titulo-secao">O Elago pela experiência de quem esteve aqui</h2>
+      </div>
+      <a class="nota-google reveal" data-atraso="1" href="https://www.google.com/search?q=elago+eventos#lrd=0x94bc4b7722753c41:0xeb4dac9086f68dc4,1" target="_blank" rel="noopener">
+        <span class="valor">4,9</span>
+        <span class="detalhe">
+          <span class="estrelas" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+          </span>
+          Nota no Google
+        </span>
+      </a>
+    </div>
+
+    <div class="carrossel reveal" data-atraso="1">
+      <div class="trilho" id="trilho-depoimentos" tabindex="0" aria-label="Depoimentos de clientes no Google">
+        <figure class="depoimento">
+          <svg class="aspas" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          <blockquote>Estrutura linda e planejada para todos os tipos de eventos. Paisagens única</blockquote>
+          <footer><span class="avatar" aria-hidden="true">A</span><span class="quem"><strong>Andre Saraiva</strong><span>Avaliação no Google</span></span></footer>
+        </figure>
+        <figure class="depoimento">
+          <svg class="aspas" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          <blockquote>Lugar maravilhoso pra eventos de todos os tipos, localização excelente, fácil acesso, super recomendo.</blockquote>
+          <footer><span class="avatar" aria-hidden="true">R</span><span class="quem"><strong>Rodrigo Reis</strong><span>Avaliação no Google</span></span></footer>
+        </figure>
+        <figure class="depoimento">
+          <svg class="aspas" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          <blockquote>Lugar muito lindo, estrutura boa, ambiente climatizado, passei horas muito agradáveis neste local, e o lago é muito bonito.</blockquote>
+          <footer><span class="avatar" aria-hidden="true">L</span><span class="quem"><strong>Leonardo Destefani</strong><span>Avaliação no Google</span></span></footer>
+        </figure>
+        <figure class="depoimento">
+          <svg class="aspas" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          <blockquote>Lugar aconchegante e moderno, atendimento excelente! A casa é completa e o espaço de eventos sem duvidas é um dos mais lindos que já visitei!</blockquote>
+          <footer><span class="avatar" aria-hidden="true">B</span><span class="quem"><strong>Barbara Galiardo</strong><span>Avaliação no Google</span></span></footer>
+        </figure>
+        <figure class="depoimento">
+          <svg class="aspas" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          <blockquote>Muito grande, o local possui vários ambientes, excelente para fazer festas</blockquote>
+          <footer><span class="avatar" aria-hidden="true">R</span><span class="quem"><strong>Rubens Cesar</strong><span>Avaliação no Google</span></span></footer>
+        </figure>
+        <figure class="depoimento">
+          <svg class="aspas" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
+          <blockquote>Espaço e estrutura perfeita para seu evento</blockquote>
+          <footer><span class="avatar" aria-hidden="true">C</span><span class="quem"><strong>Charles Fernandes</strong><span>Avaliação no Google</span></span></footer>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALERIA ===================== -->
+<section class="secao galeria escuro" id="galeria">
+  <div class="wrap">
+    <div class="cabecalho-secao reveal">
+      <span class="rotulo">Galeria</span>
+      <h2 class="titulo-secao">Veja como o Elago pode <br class="quebra-desktop"><span class="destaque">se transformar</span> para o seu evento</h2>
+    </div>
+    <div class="grid-galeria reveal" id="grid-galeria">
+      <button class="g-item g-grande" type="button"><img src="/imagens/elago-galeria-06.jpg" alt="Jantar de gala no salão do Elago, com palco, treliça de iluminação e telão" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-05.jpg" alt="Vista aérea de feira na área externa do Elago, com ombrelones e expositores" loading="lazy" width="1280" height="720"></button>
+      <button class="g-item g-alta" type="button"><img src="/imagens/elago-galeria-02.jpg" alt="Jantar corporativo no salão do Elago com iluminação cênica em azul e roxo" loading="lazy" width="1200" height="1600"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-13.jpg" alt="Congresso no salão do Elago com cadeiras personalizadas e palco iluminado" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item g-larga" type="button"><img src="/imagens/elago-galeria-04.jpg" alt="Vista panorâmica do salão do Elago montado com mesas e palco" loading="lazy" width="1280" height="438"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-10.jpg" alt="Salão do Elago com plateia montada e poltronas para palestrantes" loading="lazy" width="1600" height="1020"></button>
+      <button class="g-item g-alta" type="button"><img src="/imagens/elago-galeria-11.jpg" alt="Atividade wellness ao ar livre no bosque do Elago" loading="lazy" width="1067" height="1600"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-09.jpg" alt="Treinamento no salão do Elago com participantes diante do palestrante" loading="lazy" width="1600" height="1069"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-12.jpg" alt="Palestra no salão do Elago com projeção em telão e plateia" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-15.jpg" alt="Estande de marca com vitrine em feira no Elago" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-01.jpg" alt="Salão do Elago montado com mesas redondas e arranjos florais" loading="lazy" width="1600" height="898"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-03.jpg" alt="Evento no salão do Elago com iluminação rosa e convidados às mesas" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item g-grande" type="button"><img src="/imagens/elago-galeria-08.jpg" alt="Salão do Elago montado para jantar corporativo com telões e painel de marca" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-07.jpg" alt="Área externa do Elago com tendas transparentes, mesas altas e estações de serviço" loading="lazy" width="1600" height="1067"></button>
+      <button class="g-item" type="button"><img src="/imagens/elago-galeria-14.jpg" alt="Lounge e mesas sob tendas na área externa do Elago" loading="lazy" width="1600" height="1067"></button>
+    </div>
+    <div class="pontos-galeria" id="pontos-galeria" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ===================== LOCALIZAÇÃO ===================== -->
+<section class="secao localizacao" id="localizacao">
+  <div class="wrap grid-local">
+    <div class="texto-local reveal">
+      <span class="rotulo">Localização</span>
+      <h2 class="titulo-secao">Um novo endereço para o próximo encontro da sua empresa</h2>
+    </div>
+    <div class="moldura-mapa reveal" data-atraso="1">
+      <div class="mapa">
+        <iframe src="https://maps.google.com/maps?q=-20.8852727,-49.2975024&amp;z=15&amp;output=embed" title="Mapa com a localização do Elago em Cedral (SP)" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="botoes-local reveal">
+      <a class="btn btn-escuro" href="https://www.google.com/maps/dir/?api=1&amp;destination=-20.8852727,-49.2975024" target="_blank" rel="noopener">Como chegar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTATO ===================== -->
+<section class="secao contato bege" id="contato">
+  <svg class="fachada" viewBox="0 0 1200 260" fill="none" stroke-width="1.4" aria-hidden="true">
+    <path d="M20 40h1160M36 52h1128M36 40v12M1164 40v12M60 60h1080M60 52v8M1140 52v8"/>
+    <path d="M80 60v200M1120 60v200"/>
+    <path d="M150 260V170a40 40 0 0 1 80 0v90M300 260V180a34 34 0 0 1 68 0v80M400 260V180a34 34 0 0 1 68 0v80"/>
+    <path d="M540 260V150h22v-14a38 38 0 0 1 76 0v14h22v110"/>
+    <path d="M732 260V180a34 34 0 0 1 68 0v80M832 260V180a34 34 0 0 1 68 0v80M970 260V170a40 40 0 0 1 80 0v90"/>
+  </svg>
+
+  <div class="wrap grid-contato">
+    <div class="texto-contato reveal">
+      <span class="rotulo">Contato</span>
+      <h2 class="titulo-secao">Vamos encontrar o formato certo para o seu evento?</h2>
+      <p>Preencha o formulário e receba um atendimento personalizado para conhecer nosso espaço, esclarecer dúvidas e solicitar um orçamento.</p>
+    </div>
+
+    <form class="form-contato reveal" data-atraso="1" id="form-orcamento" method="post"
+      data-form-id="form-orcamento"
+      data-submit-url={webhookUrl}
+      data-project="elago"
+      data-success-id="form-orcamento-ok"
+    >
+      <div class="campo inteiro">
+        <label for="empresa">Nome da empresa</label>
+        <input id="empresa" name="empresa" type="text" autocomplete="organization" required>
+      </div>
+      <div class="campo inteiro">
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" type="text" autocomplete="name" required>
+      </div>
+      <div class="campo">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(17) 99999-9999" required>
+      </div>
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="campo inteiro">
+        <label for="tipo_evento">Tipo de evento</label>
+        <input id="tipo_evento" name="tipo_evento" type="text" placeholder="Ex.: confraternização, congresso" required>
+      </div>
+      <div class="campo">
+        <label for="data_evento">Data do evento</label>
+        <input id="data_evento" name="data_evento" type="date" required>
+      </div>
+      <div class="campo">
+        <label for="convidados">Número de convidados</label>
+        <input id="convidados" name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex.: 300" required>
+      </div>
+      <input type="text" name="website" tabindex="-1" style="display:none;position:absolute" aria-hidden="true" autocomplete="off">
+      <button class="btn btn-escuro" type="submit">Solicitar Orçamento</button>
+      <p class="aviso">Seus dados serão usados apenas para o retorno da equipe Elago.</p>
+    </form>
+
+    <div id="form-orcamento-ok" hidden style="grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:40px">
+      <h3 style="font-family:var(--fonte-titulo);font-size:clamp(24px,3vw,36px);color:var(--cor-verde)">Mensagem enviada!</h3>
+      <p style="color:var(--cor-texto)">Em breve nossa equipe entrará em contato para apresentar as opções e enviar o orçamento.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== RODAPÉ ===================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="linha-topo">
+      <a class="logo" href="#topo" aria-label="Elago — voltar ao topo"><img src="/imagens/elago-logo.svg" alt="Elago" width="136" height="54" loading="lazy"></a>
+      <address>Estrada Municipal, a Engenheiro Schimidt, s/n - Km 4, Cedral - SP, 15895-000</address>
+      <a class="social" href="https://www.instagram.com/elagoeventos/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        @elagoeventos
+      </a>
+    </div>
+    <div class="linha-base">
+      <span>© <span id="ano">2026</span> Elago Eventos. Todos os direitos reservados.</span>
+      <span>Desenvolvido por Dmove</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CTA fixo no celular -->
+<div class="cta-movel" id="cta-movel">
+  <a class="btn btn-claro" href="#contato">Solicite orçamento</a>
+</div>
+
+<!-- Lightbox da galeria -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galeria de fotos do Elago" hidden>
+  <span class="lb-contador" id="lb-contador"></span>
+  <button class="lb-fechar" type="button" aria-label="Fechar galeria"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <figure>
+    <img id="lb-imagem" src="" alt="">
+  </figure>
+</div>
+
+<script>
+  import { initForms } from '../scripts/forms';
+  document.addEventListener('DOMContentLoaded', initForms);
+</script>
+
+<script is:inline>
+(function(){
+  var reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Header muda ao rolar */
+  var header = document.getElementById('cabecalho');
+  function atualizaHeader(){ header.classList.toggle('rolado', window.scrollY > 40); }
+  atualizaHeader();
+  window.addEventListener('scroll', atualizaHeader, {passive:true});
+
+  /* Animações de entrada */
+  var revelaveis = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduzMovimento){
+    var io = new IntersectionObserver(function(entradas){
+      entradas.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visivel'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+    revelaveis.forEach(function(el){ io.observe(el); });
+  } else {
+    revelaveis.forEach(function(el){ el.classList.add('visivel'); });
+  }
+
+  /* Autoridade: linhas, entrada escalonada e contagem dos números */
+  var autoridade = document.getElementById('autoridade');
+  if (autoridade){
+    var contadores = autoridade.querySelectorAll('.contador');
+    var formata = function(n){ return n.toLocaleString('pt-BR'); };
+    var anima = function(){
+      autoridade.classList.add('animado');
+      contadores.forEach(function(c){
+        var alvo = Number(c.dataset.alvo);
+        if (reduzMovimento){ c.textContent = formata(alvo); return; }
+        var inicio = null, dur = 1800;
+        c.textContent = '0';
+        var passo = function(t){
+          if (!inicio) inicio = t;
+          var pr = Math.min((t - inicio) / dur, 1);
+          var suave = 1 - Math.pow(1 - pr, 3);
+          c.textContent = formata(Math.round(alvo * suave));
+          if (pr < 1) requestAnimationFrame(passo);
+        };
+        setTimeout(function(){ requestAnimationFrame(passo); }, 450);
+      });
+    };
+    if ('IntersectionObserver' in window && !reduzMovimento){
+      var ioAut = new IntersectionObserver(function(en){
+        if (en[en.length-1].isIntersecting){ anima(); ioAut.disconnect(); }
+      }, {threshold:0.35});
+      ioAut.observe(autoridade);
+    } else { anima(); }
+  }
+
+  /* Vídeo do conceito: som e pausa fora da tela */
+  var video = document.getElementById('video-conceito');
+  var btnSom = document.querySelector('.btn-som');
+  if (video && btnSom){
+    if (reduzMovimento){ video.removeAttribute('autoplay'); video.pause(); }
+    btnSom.addEventListener('click', function(){
+      var ligar = video.muted;
+      video.muted = !ligar;
+      if (ligar && video.paused){ video.play(); }
+      btnSom.setAttribute('aria-pressed', String(ligar));
+      btnSom.setAttribute('aria-label', ligar ? 'Desativar som do vídeo' : 'Ativar som do vídeo');
+      btnSom.querySelector('.txt-som').textContent = ligar ? 'Som ativado' : 'Ativar som';
+    });
+    if ('IntersectionObserver' in window && !reduzMovimento){
+      new IntersectionObserver(function(entradas){
+        entradas.forEach(function(e){
+          if (e.isIntersecting){ var p = video.play(); if (p && p.catch) p.catch(function(){}); }
+          else { video.pause(); }
+        });
+      }, {threshold:0.25}).observe(video);
+    }
+  }
+
+  /* Carrossel de depoimentos: avança sozinho (sem setas); pausa ao passar o mouse ou tocar */
+  var trilho = document.getElementById('trilho-depoimentos');
+  if (trilho && !reduzMovimento){
+    var passo = function(){ var c = trilho.querySelector('.depoimento'); return c ? c.getBoundingClientRect().width + 24 : 300; };
+    var timer = null, pausado = false;
+    var avanca = function(){
+      if (pausado) return;
+      var max = trilho.scrollWidth - trilho.clientWidth - 2;
+      if (trilho.scrollLeft >= max) trilho.scrollTo({left:0, behavior:'smooth'});
+      else trilho.scrollBy({left: passo(), behavior:'smooth'});
+    };
+    var inicia = function(){ if (!timer) timer = setInterval(avanca, 5000); };
+    var para = function(){ clearInterval(timer); timer = null; };
+    ['mouseenter','focusin','touchstart'].forEach(function(ev){ trilho.addEventListener(ev, function(){ pausado = true; }, {passive:true}); });
+    ['mouseleave','focusout','touchend'].forEach(function(ev){ trilho.addEventListener(ev, function(){ setTimeout(function(){ pausado = false; }, 2500); }, {passive:true}); });
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(en){ en[en.length-1].isIntersecting ? inicia() : para(); }, {threshold:0.3}).observe(trilho);
+    } else { inicia(); }
+  }
+
+  /* Galeria: pontos do carrossel (celular) + lightbox */
+  var grid = document.getElementById('grid-galeria');
+  var pontos = document.getElementById('pontos-galeria');
+  if (grid && pontos){
+    var fotos = grid.querySelectorAll('.g-item');
+    fotos.forEach(function(f, i){
+      var b = document.createElement('button');
+      b.type = 'button'; b.tabIndex = -1;
+      b.addEventListener('click', function(){ grid.scrollTo({left: f.offsetLeft - (grid.clientWidth - f.clientWidth) / 2, behavior:'smooth'}); });
+      pontos.appendChild(b);
+    });
+    var marcaPonto = function(){
+      var centro = grid.scrollLeft + grid.clientWidth / 2, melhor = 0, dist = Infinity;
+      fotos.forEach(function(f, i){ var d = Math.abs(f.offsetLeft + f.clientWidth / 2 - centro); if (d < dist){ dist = d; melhor = i; } });
+      pontos.querySelectorAll('button').forEach(function(b, i){ b.classList.toggle('ativo', i === melhor); });
+    };
+    grid.addEventListener('scroll', marcaPonto, {passive:true});
+    window.addEventListener('resize', marcaPonto);
+    marcaPonto();
+  }
+
+  var itens = Array.prototype.slice.call(document.querySelectorAll('.g-item'));
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-imagem');
+  var lbContador = document.getElementById('lb-contador');
+  var atual = 0, ultimoFoco = null;
+  function mostra(i){
+    atual = (i + itens.length) % itens.length;
+    var img = itens[atual].querySelector('img');
+    lbImg.src = img.getAttribute('src');
+    lbImg.alt = img.alt;
+    lbContador.textContent = (atual + 1) + ' / ' + itens.length;
+  }
+  function abre(i){ ultimoFoco = document.activeElement; mostra(i); lb.hidden = false; document.body.style.overflow = 'hidden'; lb.querySelector('.lb-fechar').focus(); }
+  function fecha(){ lb.hidden = true; document.body.style.overflow = ''; if (ultimoFoco) ultimoFoco.focus(); }
+  itens.forEach(function(item, i){ item.setAttribute('aria-label', 'Ampliar foto: ' + item.querySelector('img').alt); item.addEventListener('click', function(){ abre(i); }); });
+  lb.querySelector('.lb-fechar').addEventListener('click', fecha);
+  lbImg.addEventListener('click', function(e){
+    var r = lbImg.getBoundingClientRect();
+    mostra(atual + ((e.clientX - r.left) < r.width / 3 ? -1 : 1));
+  });
+  lb.addEventListener('click', function(e){ if (e.target === lb) fecha(); });
+  document.addEventListener('keydown', function(e){
+    if (lb.hidden) return;
+    if (e.key === 'Escape') fecha();
+    if (e.key === 'ArrowLeft') mostra(atual - 1);
+    if (e.key === 'ArrowRight') mostra(atual + 1);
+  });
+  var toqueX = null;
+  lb.addEventListener('touchstart', function(e){ toqueX = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', function(e){
+    if (toqueX === null) return;
+    var dx = e.changedTouches[0].clientX - toqueX;
+    if (Math.abs(dx) > 50) mostra(atual + (dx < 0 ? 1 : -1));
+    toqueX = null;
+  });
+
+  /* CTA fixo no celular: aparece depois do hero e some no formulário */
+  var cta = document.getElementById('cta-movel');
+  if (cta && 'IntersectionObserver' in window){
+    var heroVisivel = true, contatoVisivel = false;
+    function atualizaCta(){ cta.classList.toggle('ativo', !heroVisivel && !contatoVisivel); }
+    new IntersectionObserver(function(en){ heroVisivel = en[en.length-1].isIntersecting; atualizaCta(); }, {threshold:0.15}).observe(document.getElementById('topo'));
+    new IntersectionObserver(function(en){ contatoVisivel = en[en.length-1].isIntersecting; atualizaCta(); }, {threshold:0.1}).observe(document.getElementById('contato'));
+  }
+
+  /* Ano no rodapé */
+  var ano = document.getElementById('ano');
+  if (ano) ano.textContent = new Date().getFullYear();
+})();
+</script>
+
+</Base>
