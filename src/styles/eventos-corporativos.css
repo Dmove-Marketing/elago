@@ -34,6 +34,8 @@ body{
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 html body{color:var(--cor-texto);background:var(--cor-branco)}
+body p{color:var(--cor-texto)}
+.escuro p{color:var(--cor-texto-claro)}
 img,video,svg{display:block;max-width:100%}
 a{color:inherit}
 button{font:inherit;cursor:pointer}
