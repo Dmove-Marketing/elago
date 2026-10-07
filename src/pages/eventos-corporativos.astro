@@ -329,6 +329,10 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
       data-success-id="form-orcamento-ok"
     >
       <div class="campo inteiro">
+        <label for="empresa">Nome da empresa</label>
+        <input id="empresa" name="empresa" type="text" autocomplete="organization" required>
+      </div>
+      <div class="campo inteiro">
         <label for="nome">Nome</label>
         <input id="nome" name="nome" type="text" autocomplete="name" required>
       </div>
