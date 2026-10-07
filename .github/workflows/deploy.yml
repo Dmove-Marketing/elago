@@ -32,6 +32,30 @@ jobs:
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/$DOMAIN/
 
+      - name: Obtain SSL certificate if needed
+        run: |
+          DOMAIN=$(node -e "const c=require('./config.json'); console.log(c.deploy.remote_path.split('/').pop())")
+
+          CERT_EXISTS=$(ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "[ -f /etc/letsencrypt/live/$DOMAIN/fullchain.pem ] && echo yes || echo no" 2>/dev/null || echo no)
+
+          echo "Cert exists: $CERT_EXISTS"
+
+          if [ "$CERT_EXISTS" != "yes" ]; then
+            echo "Cert nao encontrado — configurando HTTP temporario e obtendo certificado..."
+
+            ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+              ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+              "printf 'server{listen 80;server_name $DOMAIN www.$DOMAIN;root /var/www/$DOMAIN;location /.well-known/acme-challenge/{try_files \$uri =404;}location /{return 200 ok;add_header Content-Type text/plain;}}' \
+                 > /etc/nginx/sites-available/$DOMAIN && \
+               ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/$DOMAIN && \
+               nginx -t && systemctl reload nginx && \
+               certbot certonly --webroot -w /var/www/$DOMAIN \
+                 -d $DOMAIN -d www.$DOMAIN \
+                 -m dev@dmove.com.br --agree-tos --non-interactive"
+          fi
+
       - name: Configure nginx vhost
         run: |
           DOMAIN=$(node -e "const c=require('./config.json'); console.log(c.deploy.remote_path.split('/').pop())")
