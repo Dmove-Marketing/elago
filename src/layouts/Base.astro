@@ -1,12 +1,5 @@
 ---
 import '../styles/global.css';
-import '@fontsource/montserrat/200.css';
-import '@fontsource/montserrat/300.css';
-import '@fontsource/montserrat/400.css';
-import '@fontsource/montserrat/400-italic.css';
-import '@fontsource/montserrat/600.css';
-import '@fontsource/montserrat/700.css';
-import '@fontsource/montserrat/800.css';
 import GTMHead from '../components/tracking/GTMHead.astro';
 import GTMBody from '../components/tracking/GTMBody.astro';
 import UTMCapture from '../components/tracking/UTMCapture.astro';
@@ -65,9 +58,20 @@ const defaultJsonLd = {
     <meta property="og:locale" content="pt_BR" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/images/icone.png" />
-    <link rel="shortcut icon" href="/images/icone.png" />
-    <link rel="apple-touch-icon" href="/images/icone.png" />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link rel="shortcut icon" href="/images/favicon.png" />
+    <link rel="apple-touch-icon" href="/images/favicon.png" />
+
+    <!-- Fonte Morcega (Orpheus Pro) -->
+    <style>
+      @font-face {
+        font-family: "Morcega";
+        src: url("https://db.onlinewebfonts.com/t/2aea0ac500c896188f9ad191c231029c.woff2") format("woff2"),
+             url("https://db.onlinewebfonts.com/t/2aea0ac500c896188f9ad191c231029c.woff") format("woff"),
+             url("https://db.onlinewebfonts.com/t/2aea0ac500c896188f9ad191c231029c.ttf") format("truetype");
+        font-display: swap;
+      }
+    </style>
 
     <!-- GTM Head -->
     {trackingEnabled && gtmId && <GTMHead gtmId={gtmId} />}

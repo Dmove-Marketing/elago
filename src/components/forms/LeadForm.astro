@@ -15,6 +15,8 @@ interface Field {
   full?: boolean;
   id?: string;
   autocomplete?: string;
+  datepicker?: boolean;
+  hint?: string;
   errorText?: string;
   errorId?: string;
   maxlength?: number;
@@ -123,23 +125,23 @@ const groupCls  = (full?: boolean) => {
           <div class={cxRow}>
             {row.fields.map((f) => (
               <div class={groupCls(f.full)}>
-                {f.label && <label class={cxLabel} for={f.id ?? f.name}>{f.label}</label>}
+                {f.label && <label class={cxLabel} for={f.id ?? `form-field-${f.name}`}>{f.label}</label>}
                 {f.type === 'select' ? (
-                  <select class={cxSelect} name={f.name} id={f.id ?? f.name} required={f.required}>
+                  <select class={cxSelect} name={f.name} id={f.id ?? `form-field-${f.name}`} required={f.required}>
                     {f.options?.map((opt) => (
                       <option value={opt.value} disabled={opt.disabled} selected={opt.selected}>{opt.label}</option>
                     ))}
                   </select>
                 ) : f.type === 'textarea' ? (
-                  <textarea class={cxArea} name={f.name} id={f.id ?? f.name} rows={f.rows ?? 4} placeholder={f.placeholder} required={f.required}></textarea>
+                  <textarea class={cxArea} name={f.name} id={f.id ?? `form-field-${f.name}`} rows={f.rows ?? 4} placeholder={f.placeholder} required={f.required}></textarea>
                 ) : f.type === 'hidden' ? (
-                  <input type="hidden" name={f.name} id={f.id ?? f.name} value={f.value} />
+                  <input type="hidden" name={f.name} id={f.id ?? `form-field-${f.name}`} value={f.value} />
                 ) : (
                   <input
                     class={cxInput}
                     type={f.type}
                     name={f.name}
-                    id={f.id ?? f.name}
+                    id={f.id ?? `form-field-${f.name}`}
                     placeholder={f.placeholder}
                     required={f.required}
                     autocomplete={f.autocomplete}
@@ -159,26 +161,31 @@ const groupCls  = (full?: boolean) => {
       const f = fieldOrRow as Field;
 
       if (f.type === 'hidden') {
-        return <input type="hidden" name={f.name} id={f.id ?? f.name} value={f.value} />;
+        return <input type="hidden" name={f.name} id={f.id ?? `form-field-${f.name}`} value={f.value} />;
       }
 
       return (
         <div class={groupCls(f.full)}>
-          {f.label && <label class={cxLabel} for={f.id ?? f.name}>{f.label}</label>}
+          {f.label && (
+            <label class={cxLabel} for={f.id ?? `form-field-${f.name}`}>
+              {f.label}
+              {(f as any).hint && <span class="field-hint"> ({(f as any).hint})</span>}
+            </label>
+          )}
           {f.type === 'select' ? (
-            <select class={cxSelect} name={f.name} id={f.id ?? f.name} required={f.required}>
+            <select class={cxSelect} name={f.name} id={f.id ?? `form-field-${f.name}`} required={f.required}>
               {f.options?.map((opt) => (
                 <option value={opt.value} disabled={opt.disabled} selected={opt.selected}>{opt.label}</option>
               ))}
             </select>
           ) : f.type === 'textarea' ? (
-            <textarea class={cxArea} name={f.name} id={f.id ?? f.name} rows={f.rows ?? 4} placeholder={f.placeholder} required={f.required}></textarea>
+            <textarea class={cxArea} name={f.name} id={f.id ?? `form-field-${f.name}`} rows={f.rows ?? 4} placeholder={f.placeholder} required={f.required}></textarea>
           ) : (
             <input
               class={cxInput}
               type={f.type}
               name={f.name}
-              id={f.id ?? f.name}
+              id={f.id ?? `form-field-${f.name}`}
               placeholder={f.placeholder}
               required={f.required}
               autocomplete={f.autocomplete}
@@ -186,6 +193,7 @@ const groupCls  = (full?: boolean) => {
               min={f.min}
               max={f.max}
               readonly={f.readonly}
+              data-datepicker={(f as any).datepicker ? 'true' : undefined}
             />
           )}
           {f.errorText && <span class={cxError} id={f.errorId}>{f.errorText}</span>}

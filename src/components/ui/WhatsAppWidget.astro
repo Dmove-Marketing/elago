@@ -1,0 +1,1229 @@
+---
+import config from '../../../config.json';
+import { trackingParamKeys, tipoEventoOptions } from '../../scripts/lead-payload';
+
+interface Props {
+  phone?: string;
+  displayName?: string;
+  avatar?: string;
+  submitUrl?: string;
+  project?: string;
+  /** Pergunta o nome da empresa antes do nome (usado na página de eventos corporativos) */
+  showEmpresaField?: boolean;
+}
+
+const {
+  phone = config.whatsapp?.phone || '5511917299858',
+  displayName = config.whatsapp?.display_name || 'Atendimento',
+  avatar = config.whatsapp?.avatar || '/images/whatsapp-avatar.jpg',
+  submitUrl = config.forms['lead-form']?.webhooks[0] || '',
+  project = config.project_slug || 'landing-page',
+  showEmpresaField = false,
+} = Astro.props;
+
+// Roteiro da conversa: uma pergunta por campo (estilo Captura Web / Voe)
+const fields = [
+  ...(showEmpresaField
+    ? [{ key: 'empresa', type: 'text', label: 'Qual é o nome da sua empresa?', placeholder: 'Nome da empresa' }]
+    : []),
+  { key: 'nome', type: 'text', label: 'Pra começar, qual é o seu nome? 😊', placeholder: 'Seu nome' },
+  { key: 'tel', type: 'phone', label: 'Qual é o seu WhatsApp com DDD?', placeholder: '(11) 99999-9999' },
+  { key: 'email', type: 'email', label: 'E o seu e-mail?', placeholder: 'seu@email.com' },
+  { key: 'tipo_evento', type: 'select', label: 'Que tipo de evento você quer celebrar? 🥂', options: tipoEventoOptions },
+  { key: 'data_evento', type: 'date', label: 'Qual é a data prevista do evento? 📅', placeholder: 'dd/mm/aaaa' },
+  { key: 'convidados', type: 'number', label: 'E quantos convidados, aproximadamente?', placeholder: 'Ex: 150', chips: ['50', '100', '150', '200', '300'] },
+];
+
+const introMessages = [
+  `Olá! 👋 Bem-vindo(a) à ${displayName}.`,
+  'Vou te fazer algumas perguntas rápidas para preparar o seu orçamento, tudo bem?',
+];
+---
+
+<!-- ===== WHATSAPP FLOATING WIDGET (conversacional) ===== -->
+<div id="wa-widget" aria-label="Fale pelo WhatsApp">
+
+  <!-- Teaser (convite discreto que aparece após alguns segundos) -->
+  <div id="wa-teaser" class="wa-teaser" hidden>
+    <button class="wa-teaser__close" id="wa-teaser-close" aria-label="Dispensar mensagem">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="wa-teaser__bubble" id="wa-teaser-open">
+      <img class="wa-teaser__avatar" src={avatar} alt="" width="36" height="36" loading="lazy" onerror="this.style.visibility='hidden'" />
+      <span class="wa-teaser__text">
+        <strong>{displayName}</strong>
+        Olá! 👋 Quer um orçamento para o seu evento?
+      </span>
+    </button>
+  </div>
+
+  <!-- Botão flutuante -->
+  <button id="wa-toggle" class="wa-fab" aria-label="Abrir chat WhatsApp" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.852L.057 23.428a.5.5 0 0 0 .614.614l5.576-1.475A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.886 0-3.65-.49-5.178-1.348l-.372-.214-3.862 1.022 1.022-3.732-.228-.384A9.945 9.945 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+    </svg>
+    <span class="wa-fab__badge" id="wa-badge">1</span>
+  </button>
+
+  <!-- Popup chat -->
+  <div id="wa-popup" class="wa-popup" role="dialog" aria-modal="true" aria-label="Chat WhatsApp" hidden>
+
+    <!-- Header -->
+    <div class="wa-header">
+      <div class="wa-header__avatar">
+        <span class="wa-header__avatar-fallback" aria-hidden="true">{displayName.charAt(0)}</span>
+        <img class="wa-header__avatar-img" src={avatar} alt="" width="40" height="40" loading="lazy" onerror="this.remove()" />
+        <span class="wa-header__status" aria-hidden="true"></span>
+      </div>
+      <div class="wa-header__info">
+        <strong>
+          {displayName}
+          <svg class="wa-header__verified" viewBox="0 0 24 24" width="14" height="14" aria-label="Conta verificada">
+            <path fill="#25D366" d="M12 1l2.6 2.2 3.4-.4 1.2 3.2 3 1.7-.8 3.3 2 2.7-2 2.7.8 3.3-3 1.7-1.2 3.2-3.4-.4L12 26l-2.6-2.2-3.4.4-1.2-3.2-3-1.7.8-3.3-2-2.7 2-2.7-.8-3.3 3-1.7L7.9 2.8l3.4.4z" transform="scale(.88) translate(1.5 -1)"/>
+            <path fill="#fff" d="M10.4 15.9l-3-3 1.3-1.3 1.7 1.7 4.9-4.9 1.3 1.3z"/>
+          </svg>
+        </strong>
+        <span class="wa-header__presence"><span class="wa-header__presence-dot"></span> Online</span>
+      </div>
+      <button class="wa-header__close" id="wa-close" aria-label="Fechar chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Área de chat (os balões são criados via JS) -->
+    <div class="wa-chat" id="wa-chat" role="log" aria-live="polite"></div>
+
+    <!-- Barra de input (só visível durante uma pergunta ativa) -->
+    <div class="wa-inputbar" id="wa-inputbar" hidden>
+      <label class="wa-inputbar__label" id="wa-inputbar-label" for="wa-input"></label>
+
+      <!-- chips de seleção única / sugestões -->
+      <div class="wa-chips" id="wa-chips" hidden></div>
+
+      <div class="wa-inputbar__row" id="wa-inputbar-row">
+        <input id="wa-input" class="wa-input" type="text" autocomplete="off" />
+        <div class="wa-datefield" id="wa-datefield" hidden>
+          <input id="wa-input-date" class="wa-input" type="text" placeholder="dd/mm/aaaa" autocomplete="off" inputmode="numeric" maxlength="10" data-wa-flatpickr="true" />
+          <svg class="wa-datefield__icon" id="wa-date-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="3"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <button class="wa-send" id="wa-send" aria-label="Enviar resposta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+      </div>
+      <p class="wa-inputbar__error" id="wa-error" role="alert" hidden></p>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ submitUrl, project, trackingParamKeys, phone, fields, introMessages, avatar }}>
+  /* ── Elementos ─────────────────────────────── */
+  const toggle    = document.getElementById('wa-toggle');
+  const popup     = document.getElementById('wa-popup');
+  const closeBtn  = document.getElementById('wa-close');
+  const badge     = document.getElementById('wa-badge');
+  const chat      = document.getElementById('wa-chat');
+  const inputbar  = document.getElementById('wa-inputbar');
+  const inputLbl  = document.getElementById('wa-inputbar-label');
+  const inputRow  = document.getElementById('wa-inputbar-row');
+  const input     = document.getElementById('wa-input');
+  const dateField = document.getElementById('wa-datefield');
+  const dateInput = document.getElementById('wa-input-date');
+  const chipsBox  = document.getElementById('wa-chips');
+  const sendBtn   = document.getElementById('wa-send');
+  const errorEl   = document.getElementById('wa-error');
+  const teaser    = document.getElementById('wa-teaser');
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
+
+  /* ── Estado da conversa (persistido na sessão) ── */
+  const STATE_KEY = 'wa_convo';
+  let state = { answers: {}, idx: 0, done: false };
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || 'null');
+    if (saved && typeof saved.idx === 'number') state = saved;
+  } catch (_) {}
+  const saveState = () => { try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (_) {} };
+
+  /* ── Balões ─────────────────────────────────── */
+  function scrollChat() {
+    setTimeout(() => { chat.scrollTop = chat.scrollHeight; }, 50);
+  }
+
+  function bubble(who, text, instant) {
+    const row = document.createElement('div');
+    row.className = `wa-row wa-row--${who}` + (instant ? ' wa-row--instant' : '');
+    if (who === 'agent') {
+      const img = document.createElement('img');
+      img.className = 'wa-row__avatar';
+      img.src = avatar;
+      img.alt = '';
+      img.width = 24; img.height = 24;
+      img.onerror = () => { img.style.visibility = 'hidden'; };
+      row.appendChild(img);
+    }
+    const b = document.createElement('div');
+    b.className = 'wa-msg';
+    b.textContent = text;
+    row.appendChild(b);
+    chat.appendChild(row);
+    scrollChat();
+    return row;
+  }
+
+  function bubbleHtml(who, node) {
+    const row = document.createElement('div');
+    row.className = `wa-row wa-row--${who}`;
+    const b = document.createElement('div');
+    b.className = 'wa-msg';
+    b.appendChild(node);
+    row.appendChild(b);
+    chat.appendChild(row);
+    scrollChat();
+    return row;
+  }
+
+  let typingRow = null;
+  function setTyping(on) {
+    if (on && !typingRow) {
+      typingRow = document.createElement('div');
+      typingRow.className = 'wa-row wa-row--agent';
+      typingRow.innerHTML = `<img class="wa-row__avatar" src="${avatar}" alt="" width="24" height="24">
+        <div class="wa-msg wa-typing"><span class="wa-dot"></span><span class="wa-dot"></span><span class="wa-dot"></span></div>`;
+      chat.appendChild(typingRow);
+      scrollChat();
+    } else if (!on && typingRow) {
+      typingRow.remove();
+      typingRow = null;
+    }
+  }
+
+  /* ── Máscaras ───────────────────────────────── */
+  function maskPhone(v) {
+    let d = v.replace(/\D/g, '');
+    if (d.startsWith('55') && d.length > 11) d = d.slice(2);
+    d = d.slice(0, 11);
+    if (d.length > 7) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+    if (d.length > 2) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    return d.length ? `(${d}` : '';
+  }
+  function maskDate(v) {
+    let d = v.replace(/\D/g, '').slice(0, 8);
+    if (d.length > 4) return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
+    if (d.length > 2) return `${d.slice(0, 2)}/${d.slice(2)}`;
+    return d;
+  }
+
+  /* ── Validação ──────────────────────────────── */
+  function validate(field, value) {
+    const v = value.trim();
+    if (!v) return 'Campo obrigatório';
+    if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Digite um e-mail válido';
+    if (field.type === 'phone') {
+      const d = v.replace(/\D/g, '');
+      if (d.startsWith('55') && d.length > 11) return 'Não coloque o DDI 55. Informe apenas DDD + número.';
+      if (d.length < 10) return 'Digite um telefone válido com DDD';
+    }
+    if (field.type === 'date' && !/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return 'Digite a data no formato dd/mm/aaaa';
+    if (field.type === 'number' && !/^\d+\+?$/.test(v)) return 'Digite um número';
+    return null;
+  }
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.hidden = false;
+    inputRow.classList.add('wa-inputbar__row--error');
+  }
+  function clearError() {
+    errorEl.hidden = true;
+    inputRow.classList.remove('wa-inputbar__row--error');
+  }
+
+  /* ── Input ativo ────────────────────────────── */
+  let activeResolve = null;
+  let activeField = null;
+
+  function showInput(field) {
+    activeField = field;
+    inputbar.hidden = false;
+    inputLbl.textContent = field.label.replace(/\s*[😊🥂📅]\s*/g, '');
+    clearError();
+
+    const isDate = field.type === 'date';
+    const isSelect = field.type === 'select';
+
+    input.hidden = isDate || isSelect;
+    dateField.hidden = !isDate;
+    inputRow.hidden = isSelect;
+    sendBtn.hidden = isSelect;
+
+    // chips: opções de seleção única ou sugestões numéricas
+    chipsBox.innerHTML = '';
+    const chips = isSelect ? field.options : (field.chips || []).map((c) => ({ value: c, label: c === '300' ? '300+' : c }));
+    if (chips && chips.length) {
+      chipsBox.hidden = false;
+      chips.forEach((o) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'wa-chip';
+        btn.textContent = o.label;
+        btn.addEventListener('click', () => submitAnswer(o.value, o.label));
+        chipsBox.appendChild(btn);
+      });
+    } else {
+      chipsBox.hidden = true;
+    }
+
+    if (!isSelect) {
+      const el = isDate ? dateInput : input;
+      el.value = '';
+      el.placeholder = field.placeholder || '';
+      if (!isDate) {
+        input.type = 'text';
+        input.inputMode = field.type === 'phone' || field.type === 'number' ? 'numeric' : (field.type === 'email' ? 'email' : 'text');
+        input.autocomplete = { nome: 'name', tel: 'tel', email: 'email', empresa: 'organization' }[field.key] || 'off';
+      }
+      setTimeout(() => el.focus({ preventScroll: true }), 100);
+    }
+    scrollChat();
+  }
+
+  function hideInput() {
+    inputbar.hidden = true;
+    activeField = null;
+  }
+
+  function submitAnswer(value, display) {
+    if (!activeResolve) return;
+    const err = validate(activeField, String(value));
+    if (err) { showError(err); return; }
+    clearError();
+    const r = activeResolve;
+    activeResolve = null;
+    hideInput();
+    r({ value: String(value).trim(), display: (display || String(value)).trim() });
+  }
+
+  function currentInputEl() {
+    return activeField?.type === 'date' ? dateInput : input;
+  }
+
+  sendBtn.addEventListener('click', () => {
+    if (activeField) submitAnswer(currentInputEl().value);
+  });
+  [input, dateInput].forEach((el) => {
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && activeField) {
+        e.preventDefault();
+        submitAnswer(el.value);
+      }
+    });
+    el.addEventListener('input', clearError);
+  });
+  input.addEventListener('input', () => {
+    if (activeField?.type === 'phone') input.value = maskPhone(input.value);
+    if (activeField?.type === 'number') input.value = input.value.replace(/\D/g, '').slice(0, 5);
+  });
+  dateInput.addEventListener('input', () => { dateInput.value = maskDate(dateInput.value); });
+
+  /* ── Roteiro da conversa ────────────────────── */
+  function waMessage() {
+    const a = state.answers;
+    const tipo = a.tipo_evento?.display || 'meu evento';
+    const parts = [`Olá! Sou ${a.nome?.display || ''}`.trim()];
+    if (a.empresa) parts[0] += `, da empresa ${a.empresa.display}`;
+    parts.push(`Gostaria de um orçamento para ${tipo.toLowerCase()}`);
+    if (a.data_evento) parts[parts.length - 1] += ` no dia ${a.data_evento.display}`;
+    if (a.convidados) parts[parts.length - 1] += `, para aproximadamente ${a.convidados.display} convidados`;
+    return `${parts.join('. ')}. 🥂`;
+  }
+  const waUrl = () => `https://wa.me/${phone}?text=${encodeURIComponent(waMessage())}`;
+
+  function ctaBubble() {
+    const link = document.createElement('a');
+    link.className = 'wa-cta';
+    link.href = waUrl();
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.852L.057 23.428a.5.5 0 0 0 .614.614l5.576-1.475A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg> Continuar no WhatsApp`;
+    bubbleHtml('agent', link);
+  }
+
+  async function agentSays(text, typingMs) {
+    setTyping(true);
+    await wait(typingMs || 700);
+    setTyping(false);
+    bubble('agent', text);
+    await wait(350);
+  }
+
+  async function submitLead() {
+    const a = state.answers;
+    const trackingRaw = sessionStorage.getItem('dmove_tracking');
+    const tracking = trackingRaw ? JSON.parse(trackingRaw) : {};
+    const qs = new URLSearchParams();
+    trackingParamKeys.forEach((k) => { if (tracking[k]) qs.set(k, tracking[k]); });
+    const slug = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean)[0];
+    const pageSource = `Landing page/${slug || 'casamentos'}`;
+    const fonte = qs.toString() ? `${pageSource}?${qs.toString()}` : pageSource;
+
+    const now = new Date();
+    const payload = {
+      ...(a.empresa ? { Empresa: a.empresa.value } : {}),
+      Nome: a.nome?.value || '',
+      WhatsApp: a.tel?.value || '',
+      'E-mail': a.email?.value || '',
+      'Data do evento': a.data_evento?.value || '',
+      Convidados: a.convidados?.value || '',
+      'Tipo de evento': a.tipo_evento?.value || '',
+      Fonte: fonte,
+      Data: now.toLocaleDateString('pt-BR'),
+      'Horário': now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      'URL da página': window.location.href,
+      'Agente de usuário': navigator.userAgent,
+      'Desenvolvido por': 'Dmove',
+      form_id: 'form_whatsapp',
+      form_name: 'form_whatsapp',
+    };
+    ['fbc', 'fbp', 'external_id', 'event_id'].forEach((k) => { if (tracking[k]) payload[k] = tracking[k]; });
+
+    try {
+      if (submitUrl) {
+        await fetch(submitUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        });
+      }
+    } catch (_) { /* falha silenciosa */ }
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'form_submit',
+      form_source: 'whatsapp',
+      form_id: 'form_whatsapp',
+      project: project,
+      tipo_evento: a.tipo_evento?.value || '',
+      event_id: tracking['event_id'] || window.__page_event_id || '',
+    });
+  }
+
+  let convoStarted = false;
+  async function runConversation() {
+    if (convoStarted) return;
+    convoStarted = true;
+
+    // Replay instantâneo do que já aconteceu nesta sessão (recarregou a página)
+    introMessages.forEach((m) => bubble('agent', m, true));
+    fields.slice(0, state.idx).forEach((f) => {
+      bubble('agent', f.label, true);
+      const ans = state.answers[f.key];
+      if (ans) bubble('user', ans.display, true);
+    });
+
+    if (state.done) {
+      bubble('agent', 'Recebemos sua solicitação! ✅', true);
+      ctaBubble();
+      return;
+    }
+
+    if (state.idx === 0) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'form_start', form_source: 'whatsapp', project: project, form_id: 'form_whatsapp', form_name: 'form_whatsapp' });
+      // repete a intro "ao vivo": remove o replay e digita de verdade
+      chat.innerHTML = '';
+      for (const m of introMessages) await agentSays(m);
+    }
+
+    while (state.idx < fields.length) {
+      const field = fields[state.idx];
+      await agentSays(field.label, 600);
+      showInput(field);
+      const answer = await new Promise((resolve) => { activeResolve = resolve; });
+      bubble('user', answer.display);
+      state.answers[field.key] = answer;
+      state.idx += 1;
+      saveState();
+      if (field.key === 'nome' && answer.display) {
+        await wait(350);
+        setTyping(true); await wait(500); setTyping(false);
+        bubble('agent', `Prazer, ${answer.display.split(/\s+/)[0]}! 😊`);
+      }
+      await wait(350);
+    }
+
+    // Encerramento
+    setTyping(true);
+    await Promise.all([submitLead(), wait(900)]);
+    setTyping(false);
+    state.done = true;
+    saveState();
+    bubble('agent', `Perfeito, ${state.answers.nome?.display.split(/\s+/)[0] || ''}! Já estou te chamando no WhatsApp 🚀`.replace(', !', '!'));
+    ctaBubble();
+    await wait(1200);
+    window.location.href = waUrl();
+  }
+
+  /* ── Mobile: trava o scroll da página atrás do chat ── */
+  const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+  function lockScroll(on) {
+    const lock = on && isMobile();
+    document.documentElement.style.overflow = lock ? 'hidden' : '';
+    try { lock ? window.__lenis?.stop() : window.__lenis?.start(); } catch (_) {}
+  }
+
+  /* ── Mobile (iOS): o teclado sobrepõe elementos fixos sem redimensionar o
+     layout — acompanha o visualViewport para manter a barra de input visível ── */
+  const vvp = window.visualViewport;
+  function adjustForKeyboard() {
+    if (!vvp || popup.hidden || !isMobile()) {
+      popup.style.bottom = '';
+      popup.style.height = '';
+      return;
+    }
+    const kb = Math.max(0, window.innerHeight - vvp.height - vvp.offsetTop);
+    if (kb > 60) {
+      popup.style.bottom = `${kb + 10}px`;
+      popup.style.height = `${Math.min(vvp.height - 76, 560)}px`;
+    } else {
+      popup.style.bottom = '';
+      popup.style.height = '';
+    }
+    scrollChat();
+  }
+  if (vvp) {
+    if (window.__waVVResize) {
+      vvp.removeEventListener('resize', window.__waVVResize);
+      vvp.removeEventListener('scroll', window.__waVVResize);
+    }
+    window.__waVVResize = adjustForKeyboard;
+    vvp.addEventListener('resize', adjustForKeyboard);
+    vvp.addEventListener('scroll', adjustForKeyboard);
+  }
+
+  /* ── Abrir / fechar ─────────────────────────── */
+  function openPopup() {
+    hideTeaser(false);
+    popup.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => popup.classList.add('wa-popup--open')));
+    toggle.setAttribute('aria-expanded', 'true');
+    badge.style.display = 'none';
+    lockScroll(true);
+    runConversation();
+    if (activeField) setTimeout(() => currentInputEl().focus({ preventScroll: true }), 300);
+    scrollChat();
+  }
+
+  function closePopup() {
+    popup.classList.remove('wa-popup--open');
+    toggle.setAttribute('aria-expanded', 'false');
+    lockScroll(false);
+    setTimeout(() => {
+      popup.hidden = true;
+      popup.style.bottom = '';
+      popup.style.height = '';
+    }, 280);
+  }
+
+  toggle.addEventListener('click', () => {
+    popup.hidden ? openPopup() : closePopup();
+  });
+  closeBtn.addEventListener('click', closePopup);
+
+  /* ── Teaser ─────────────────────────────────── */
+  function hideTeaser(persist) {
+    if (!teaser || teaser.hidden) return;
+    teaser.classList.remove('wa-teaser--in');
+    setTimeout(() => { teaser.hidden = true; }, 220);
+    if (persist) { try { sessionStorage.setItem('wa_teaser_off', '1'); } catch (_) {} }
+  }
+  if (teaser && !sessionStorage.getItem('wa_teaser_off') && state.idx === 0 && !state.done) {
+    setTimeout(() => {
+      if (popup.hidden) {
+        teaser.hidden = false;
+        requestAnimationFrame(() => teaser.classList.add('wa-teaser--in'));
+      }
+    }, 4500);
+  }
+  document.getElementById('wa-teaser-close')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideTeaser(true);
+  });
+  document.getElementById('wa-teaser-open')?.addEventListener('click', () => {
+    try { sessionStorage.setItem('wa_teaser_off', '1'); } catch (_) {}
+    openPopup();
+  });
+
+  // O calendário (flatpickr) é anexado ao <body>, FORA do popup. Enquanto ele
+  // estiver aberto, nenhum clique/ESC deve fechar o popup. O estado vem do
+  // próprio flatpickr (window.__waCalendarOpen, definido via onOpen/onClose no
+  // outro <script>) — não depende do alvo do clique, então é à prova de
+  // re-render do calendário.
+  const isCalendarEngaged = () => window.__waCalendarOpen === true;
+
+  // Listeners de document idempotentes: removemos o anterior antes de registrar.
+  // Isso evita que o HMR (dev) empilhe múltiplos handlers antigos que fechavam
+  // o popup mesmo com a correção aplicada.
+  if (window.__waOutsideClick) document.removeEventListener('click', window.__waOutsideClick);
+  window.__waOutsideClick = (e) => {
+    if (isCalendarEngaged()) return;
+    if (
+      !popup.hidden &&
+      !popup.contains(e.target) &&
+      e.target !== toggle &&
+      !toggle.contains(e.target)
+    ) {
+      closePopup();
+    }
+  };
+  document.addEventListener('click', window.__waOutsideClick);
+
+  if (window.__waEscKey) document.removeEventListener('keydown', window.__waEscKey);
+  window.__waEscKey = (e) => {
+    if (e.key === 'Escape' && !popup.hidden && !isCalendarEngaged()) closePopup();
+  };
+  document.addEventListener('keydown', window.__waEscKey);
+</script>
+
+<!-- Calendário (flatpickr) do campo Data — mesmo do formulário normal -->
+<script>
+  import flatpickr from 'flatpickr';
+  import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
+  import 'flatpickr/dist/flatpickr.min.css';
+
+  function initWaDatepicker() {
+    const el = document.querySelector<HTMLInputElement>('[data-wa-flatpickr]');
+    if (!el || el.dataset.flatpickrReady) return;
+    el.dataset.flatpickrReady = 'true';
+
+    const icon = document.getElementById('wa-date-icon');
+
+    // não-static: o calendário é anexado ao body e flutua acima do popup,
+    // evitando ser cortado pelo overflow da janela de chat (altura limitada)
+    const fp = flatpickr(el, {
+      locale: Portuguese,
+      dateFormat: 'd/m/Y',
+      minDate: 'today',
+      // No celular usa o seletor de data NATIVO do sistema (muito melhor no
+      // toque); o flatpickr mantém o input original sincronizado em d/m/Y
+      disableMobile: false,
+      allowInput: true,
+      // Sinaliza ao popup que o calendário está engajado. O pequeno atraso no
+      // onClose garante que o clique que fechou o calendário (seleção da data
+      // ou clique fora) não seja interpretado como "fechar o popup".
+      onOpen: () => { window.__waCalendarOpen = true; },
+      onClose: () => { setTimeout(() => { window.__waCalendarOpen = false; }, 250); },
+    });
+
+    icon?.addEventListener('click', () => fp.open());
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWaDatepicker);
+  } else {
+    initWaDatepicker();
+  }
+</script>
+
+<style>
+  /* ── Variáveis ──────────────────────────────── */
+  :root {
+    --wa-green:      #25D366;
+    --wa-green-dark: #128C7E;
+    --wa-primary:    #075E54;   /* cor primária: header e balão do usuário */
+    --wa-bg:         #ECE5DD;   /* fundo clássico do chat */
+    --wa-text:       #222;
+    --wa-subtext:    #667781;
+    --wa-border:     #e5e7eb;
+    --wa-error:      #e53e3e;
+  }
+
+  #wa-widget { display: contents; }
+  #wa-widget [hidden] { display: none !important; }
+
+  /* O calendário (flatpickr) é anexado ao <body> com z-index padrão (~99999),
+     que fica atrás do popup (2147482999) — precisa flutuar acima dele */
+  :global(.flatpickr-calendar) { z-index: 2147483001 !important; }
+
+  /* ── Botão flutuante ────────────────────────── */
+  .wa-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    z-index: 2147483000;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--wa-green);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,.45), 0 2px 8px rgba(0,0,0,.25);
+    transition: transform .15s, box-shadow .2s;
+  }
+  .wa-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(37,211,102,.55), 0 4px 12px rgba(0,0,0,.28);
+  }
+  .wa-fab:active { transform: scale(.96); }
+
+  .wa-fab::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: rgba(37,211,102,.3);
+    animation: wa-pulse 2.4s ease-out infinite;
+  }
+  @keyframes wa-pulse {
+    0%   { transform: scale(1); opacity: .6; }
+    70%  { transform: scale(1.45); opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .wa-fab__badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #FF3B30;
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 700;
+    font-family: inherit;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+  }
+
+  /* ── Teaser ─────────────────────────────────── */
+  .wa-teaser {
+    position: fixed;
+    bottom: 94px;
+    right: 20px;
+    z-index: 2147482998;
+    max-width: 270px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .22s ease, transform .22s ease;
+  }
+  .wa-teaser--in { opacity: 1; transform: translateY(0); }
+  .wa-teaser__bubble {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15);
+    cursor: pointer;
+    text-align: left;
+    transition: transform .15s, box-shadow .15s;
+    position: relative;
+  }
+  .wa-teaser__bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    transform: rotate(45deg);
+    box-shadow: 2px 2px 4px rgba(0,0,0,.08);
+  }
+  .wa-teaser__bubble:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  }
+  .wa-teaser__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid #eee;
+  }
+  .wa-teaser__text {
+    font-family: inherit;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.4;
+  }
+  .wa-teaser__text strong {
+    display: block;
+    font-size: 12px;
+    color: var(--wa-primary);
+    margin-bottom: 1px;
+  }
+  .wa-teaser__close {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    color: var(--wa-subtext);
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: color .15s, transform .15s;
+  }
+  .wa-teaser__close:hover { color: var(--wa-text); transform: scale(1.1); }
+
+  /* ── Popup ──────────────────────────────────── */
+  .wa-popup {
+    position: fixed;
+    bottom: 94px;
+    right: 20px;
+    z-index: 2147482999;
+    width: 340px;
+    height: min(540px, calc(100dvh - 130px));
+    max-width: calc(100vw - 32px);
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(16px) scale(.96);
+    opacity: 0;
+    transition: transform .28s cubic-bezier(.16,1,.3,1), opacity .25s ease;
+    pointer-events: none;
+  }
+  .wa-popup--open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Header */
+  .wa-header {
+    background: var(--wa-primary);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .wa-header__avatar {
+    position: relative;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+  }
+  .wa-header__avatar-fallback {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--wa-green-dark);
+    color: #fff;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wa-header__avatar-img {
+    position: absolute;
+    inset: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.3);
+  }
+  .wa-header__status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: #4ade80;
+    border-radius: 50%;
+    border: 2px solid var(--wa-primary);
+    z-index: 1;
+  }
+  .wa-header__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .wa-header__info strong {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .wa-header__verified {
+    flex-shrink: 0;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .wa-header__presence {
+    font-size: 11px;
+    color: #a7f3d0;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .wa-header__presence-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: wa-presence 2s ease-in-out infinite;
+  }
+  @keyframes wa-presence {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .4; }
+  }
+  .wa-header__close {
+    background: none;
+    border: none;
+    color: #a7f3d0;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color .15s, background .15s;
+    flex-shrink: 0;
+  }
+  .wa-header__close:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+  /* ── Área de chat ───────────────────────────── */
+  .wa-chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--wa-bg);
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='%23ECE5DD'/%3E%3Ccircle cx='10' cy='10' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='30' cy='10' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='50' cy='10' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='20' cy='30' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='40' cy='30' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='10' cy='50' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='30' cy='50' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3Ccircle cx='50' cy='50' r='1.5' fill='%23D5CCC4' opacity='.5'/%3E%3C/svg%3E");
+  }
+  .wa-chat::-webkit-scrollbar { width: 4px; }
+  .wa-chat::-webkit-scrollbar-track { background: transparent; }
+  .wa-chat::-webkit-scrollbar-thumb { background: #bbb; border-radius: 4px; }
+
+  /* Linhas e balões (criados via JS — usar :global) */
+  .wa-chat :global(.wa-row) {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    animation: wa-bubble-in .3s ease forwards;
+  }
+  .wa-chat :global(.wa-row--instant) { animation: none; }
+  .wa-chat :global(.wa-row--user) { justify-content: flex-end; }
+  @keyframes wa-bubble-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .wa-chat :global(.wa-row__avatar) {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  .wa-chat :global(.wa-msg) {
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 9px 13px;
+    max-width: 230px;
+    word-wrap: break-word;
+  }
+  .wa-chat :global(.wa-row--agent .wa-msg) {
+    background: #fff;
+    color: var(--wa-text);
+    border-radius: 12px 12px 12px 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  }
+  .wa-chat :global(.wa-row--user .wa-msg) {
+    background: var(--wa-primary);
+    color: #fff;
+    border-radius: 12px 12px 2px 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.12);
+  }
+
+  /* Indicador "digitando" */
+  .wa-chat :global(.wa-typing) {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+  .wa-chat :global(.wa-dot) {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #aaa;
+    animation: wa-dot-bounce 1s ease-in-out infinite;
+  }
+  .wa-chat :global(.wa-dot:nth-child(2)) { animation-delay: .15s; }
+  .wa-chat :global(.wa-dot:nth-child(3)) { animation-delay: .3s; }
+  @keyframes wa-dot-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30%           { transform: translateY(-5px); }
+  }
+
+  /* CTA final dentro de balão */
+  .wa-chat :global(.wa-cta) {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--wa-green);
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 9px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .wa-chat :global(.wa-cta:hover) { background: var(--wa-green-dark); }
+  .wa-chat :global(.wa-row .wa-msg:has(.wa-cta)) {
+    background: transparent;
+    box-shadow: none;
+    padding: 2px 0;
+  }
+
+  /* ── Barra de input ─────────────────────────── */
+  .wa-inputbar {
+    background: #fff;
+    border-top: .5px solid var(--wa-border);
+    padding: 10px 12px 12px;
+    flex-shrink: 0;
+    animation: wa-bubble-in .25s ease;
+  }
+  .wa-inputbar__label {
+    display: block;
+    font-family: inherit;
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .wa-inputbar__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .wa-input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--wa-border);
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--wa-text);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .wa-input:focus {
+    outline: none;
+    border-color: var(--wa-primary);
+    box-shadow: 0 0 0 3px rgba(7,94,84,.1);
+  }
+  .wa-input::placeholder { color: #aaa; }
+  .wa-inputbar__row--error .wa-input { border-color: var(--wa-error); }
+
+  .wa-datefield {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .wa-datefield :global(.flatpickr-wrapper) {
+    display: block;
+    width: 100%;
+  }
+  /* input nativo de data criado pelo flatpickr no mobile (sem escopo Astro) */
+  .wa-datefield :global(.flatpickr-mobile) {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid var(--wa-border);
+    border-radius: 20px;
+    padding: 8px 34px 8px 14px;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--wa-text);
+    background: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .wa-datefield :global(.flatpickr-mobile:focus) {
+    outline: none;
+    border-color: var(--wa-primary);
+    box-shadow: 0 0 0 3px rgba(7,94,84,.1);
+  }
+  /* o input nativo já tem o próprio indicador de calendário — esconde o nosso */
+  .wa-datefield:has(:global(.flatpickr-mobile)) .wa-datefield__icon { display: none; }
+  .wa-datefield .wa-input {
+    width: 100%;
+    padding-right: 34px;
+    cursor: pointer;
+  }
+  .wa-datefield__icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--wa-primary);
+    opacity: .6;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .wa-datefield:focus-within .wa-datefield__icon,
+  .wa-datefield__icon:hover { opacity: 1; }
+
+  .wa-send {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--wa-primary);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform .15s, background .2s;
+  }
+  .wa-send:hover { background: var(--wa-green-dark); transform: scale(1.06); }
+  .wa-send:active { transform: scale(.94); }
+
+  .wa-inputbar__error {
+    font-family: inherit;
+    font-size: 11px;
+    color: var(--wa-error);
+    margin: 5px 2px 0;
+  }
+
+  /* Chips (seleção única / sugestões) — criados via JS, precisam de :global */
+  .wa-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+    max-height: 132px;
+    overflow-y: auto;
+    padding: 2px;
+  }
+  .wa-chips::-webkit-scrollbar { width: 4px; }
+  .wa-chips::-webkit-scrollbar-track { background: transparent; }
+  .wa-chips::-webkit-scrollbar-thumb { background: #bbb; border-radius: 4px; }
+  .wa-chips :global(.wa-chip) {
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 13px;
+    border: 1px solid var(--wa-primary);
+    background: transparent;
+    color: var(--wa-primary);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .wa-chips :global(.wa-chip:hover) {
+    background: var(--wa-primary);
+    color: #fff;
+  }
+
+  /* ── Acessibilidade: movimento reduzido ─────── */
+  @media (prefers-reduced-motion: reduce) {
+    .wa-fab::before,
+    .wa-header__presence-dot { animation: none; }
+    .wa-chat :global(.wa-row),
+    .wa-chat :global(.wa-dot),
+    .wa-inputbar { animation: none; }
+    .wa-popup,
+    .wa-teaser,
+    .wa-fab { transition-duration: .01s; }
+  }
+
+  /* ── Responsivo ─────────────────────────────── */
+  @media (max-width: 768px) {
+    .wa-fab {
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      right: 14px;
+    }
+    .wa-popup {
+      left: 12px;
+      right: 12px;
+      width: auto;
+      max-width: none;
+      bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+      height: calc(100dvh - 110px);
+      max-height: 560px;
+      border-radius: 14px;
+    }
+    .wa-teaser {
+      bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+      right: 14px;
+      max-width: calc(100vw - 90px);
+    }
+    .wa-chat :global(.wa-msg) { max-width: 75%; }
+
+    /* fonte ≥16px evita o zoom automático do iOS ao focar o input */
+    .wa-input {
+      font-size: 16px;
+      padding: 10px 16px;
+    }
+    .wa-datefield .wa-input { padding-right: 38px; }
+    /* alvos de toque confortáveis (mínimo 44px recomendado) */
+    .wa-send {
+      width: 44px;
+      height: 44px;
+    }
+    .wa-chips :global(.wa-chip) {
+      padding: 9px 16px;
+      font-size: 14px;
+    }
+    .wa-inputbar { padding: 10px 12px calc(12px + env(safe-area-inset-bottom, 0px) / 2); }
+    .wa-header__close { padding: 10px; }
+  }
+</style>

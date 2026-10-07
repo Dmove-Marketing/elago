@@ -1,3 +1,7 @@
+import flatpickr from 'flatpickr';
+import { Portuguese } from 'flatpickr/dist/l10n/pt';
+import 'flatpickr/dist/flatpickr.min.css';
+
 function applyPhoneMask(input: HTMLInputElement) {
   input.addEventListener('input', () => {
     let v = input.value.replace(/\D/g, '');
@@ -24,6 +28,15 @@ export function initForms() {
     const project = form.dataset.project || window.location.hostname;
 
     form.querySelectorAll<HTMLInputElement>('[name="telefone"]').forEach(applyPhoneMask);
+
+    form.querySelectorAll<HTMLInputElement>('[data-datepicker]').forEach((input) => {
+      flatpickr(input, {
+        locale: Portuguese,
+        dateFormat: 'd/m/Y',
+        minDate: 'today',
+        allowInput: true,
+      });
+    });
 
     const submitUrl   = form.dataset.submitUrl;
     const redirectUrl = form.dataset.redirect;

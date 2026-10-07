@@ -1,37 +1,573 @@
 ---
 import Base from '../layouts/Base.astro';
+import WhatsAppWidget from '../components/ui/WhatsAppWidget.astro';
 import LeadForm from '../components/forms/LeadForm.astro';
+import { getPreset } from '../scripts/form-presets';
+import '../styles/elago.css';
 import config from '../../config.json';
-
-// Descomente conforme necessário:
-// import Img from '../components/ui/Img.astro';
-// import Video from '../components/ui/Video.astro';
-// import StaticMap from '../components/ui/StaticMap.astro';
-// import '../styles/index.css';
 ---
 
 <Base
-  title={`${config.project_name} | Título da página`}
-  description="Descrição da página para SEO."
+  title="Elago Eventos — O Refúgio Perfeito para Eventos Inesquecíveis"
+  description="No Elago Eventos, você é transportado para um universo onde a sofisticação se encontra com a serenidade. Salão para eventos, Varanda Gourmet, Casa Exclusiva em Cedral/SP."
   ogImage="/images/og-default.jpg"
-  canonical="https://dominio.com.br/"
+  theme="light"
 >
 
-  <!-- Cole o conteúdo migrado do Elementor aqui -->
-  <!-- Dica: use npm run scaffold para gerar automaticamente a partir de _html-originais/ -->
+<WhatsAppWidget
+  phone={config.whatsapp?.phone}
+  displayName={config.whatsapp?.display_name}
+  avatar={config.whatsapp?.avatar}
+  submitUrl={config.forms['lead-form'].webhooks[0]}
+  project={config.project_slug}
+/>
 
-  <section style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem;text-align:center;padding:2rem;">
-    <h1>{config.project_name}</h1>
-    <p>Template pronto. Cole o HTML migrado do Elementor ou use <code>npm run scaffold</code>.</p>
+<!-- HEADER -->
+<header id="header">
+  <div class="header-inner">
+    <a href="#top" class="logo">
+      <img src="https://elago.com.br/images/logo-default-149x43.png" alt="Elago Eventos" width="149" height="43" />
+    </a>
+    <nav id="main-nav">
+      <a href="#top" class="active">Home</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#ambientes">Ambientes</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#galeria">Fotos</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="#formulario" class="btn-reserve">RESERVE</a>
+  </div>
+</header>
 
+<!-- HERO -->
+<section class="hero" id="top">
+  <video class="hero-video-bg" autoplay muted loop playsinline>
+    <source src="https://elago.com.br/videos/005.mp4" type="video/mp4" />
+  </video>
+  <div class="hero-content">
+    <h1>O Refúgio Perfeito<br>para Eventos<br>Inesquecíveis</h1>
+    <a href="#formulario" class="btn-hero">RESERVE SUA DATA</a>
+  </div>
+</section>
+
+<!-- SOBRE NÓS -->
+<section id="sobre">
+  <h2 class="sobre-title">SOBRE NÓS</h2>
+  <div class="sobre-card">
+    <div class="sobre-img-wrap">
+      <img class="sobre-img" src="https://elago.com.br/images/image-map-1-570x715.jpg" alt="Elago Eventos — Vista dos espaços" width="490" height="600" />
+    </div>
+    <div class="sobre-text">
+      <h2>Mais que um espaço, um refúgio para momentos inesquecíveis</h2>
+      <p>No Elago Eventos, você é transportado para um universo onde a sofisticação se encontra com a serenidade.</p>
+      <p>Cercado pelo som do lago, a sombra das árvores e a imponência de nossa estrutura, cada evento ganha vida em um cenário único. Deixe-se inspirar pela liberdade de criar momentos que ficarão para sempre na memória.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AMBIENTES QUE ENCANTAM -->
+<section class="ambientes-encantam" id="ambientes">
+  <img class="elemento-4" src="https://elago.com.br/images/elemento-4.png" alt="" aria-hidden="true" />
+</section>
+
+<!-- SALÃO PARA EVENTOS -->
+<section class="ambiente-sec" id="salao">
+  <div class="ambiente-inner">
+    <div class="salao-slider">
+      <div class="salao-track" id="salaoTrack">
+        <div class="salao-slide"><img src="https://elago.com.br/images/b2.jpg" alt="Salão para Eventos" /></div>
+        <div class="salao-slide"><img src="https://elago.com.br/images/b3.jpg" alt="Salão para Eventos" /></div>
+        <div class="salao-slide"><img src="https://elago.com.br/images/b4.jpg" alt="Salão para Eventos" /></div>
+        <div class="salao-slide"><img src="https://elago.com.br/images/b5.jpg" alt="Salão para Eventos" /></div>
+        <div class="salao-slide"><img src="https://elago.com.br/images/b6.jpg" alt="Salão para Eventos" /></div>
+      </div>
+      <div class="salao-dots" id="salaoDots"></div>
+    </div>
+    <div class="sec-title-box">
+      <p class="sec-title">SALÃO PARA EVENTOS</p>
+    </div>
+  </div>
+  <p class="sec-desc">Amplo e imponente, nosso salão une elegância clássica com a harmonia do entorno. Perfeito para celebrações marcantes e eventos corporativos que inspiram.</p>
+</section>
+
+<!-- VARANDA GOURMET -->
+<section class="ambiente-sec" id="varanda">
+  <div class="ambiente-inner">
+    <div class="varanda-grid">
+      <img class="varanda-main" src="https://elago.com.br/images/s4.jpg" alt="Varanda Gourmet" width="550" height="480" />
+      <div class="varanda-right">
+        <img src="https://elago.com.br/images/s5.jpg" alt="Varanda Gourmet" width="360" height="238" />
+        <img src="https://elago.com.br/images/s6.jpg" alt="Varanda Gourmet" width="360" height="238" />
+      </div>
+    </div>
+    <div class="sec-title-box">
+      <p class="sec-title">VARANDA GOURMET</p>
+    </div>
+  </div>
+  <p class="sec-desc">Um Ambiente externo integrado ao ar livre, conta com piscina e vista para o lago, ideal para coquetéis, recepções e encontros descontraídos.</p>
+</section>
+
+<!-- CASA EXCLUSIVA -->
+<section class="ambiente-sec" id="casa">
+  <div class="ambiente-inner">
+    <div class="casa-slider">
+      <div class="casa-track" id="casaTrack">
+        <div class="casa-slide"><img src="https://elago.com.br/images/casa1.jpg" alt="Casa Exclusiva" /></div>
+        <div class="casa-slide"><img src="https://elago.com.br/images/casa2.jpg" alt="Casa Exclusiva" /></div>
+        <div class="casa-slide"><img src="https://elago.com.br/images/casa3.jpg" alt="Casa Exclusiva" /></div>
+        <div class="casa-slide"><img src="https://elago.com.br/images/casa4.jpg" alt="Casa Exclusiva" /></div>
+        <div class="casa-slide"><img src="https://elago.com.br/images/casa5.jpg" alt="Casa Exclusiva" /></div>
+      </div>
+    </div>
+    <div class="sec-title-box">
+      <p class="sec-title">CASA EXCLUSIVA</p>
+    </div>
+  </div>
+  <p class="sec-desc">Acolhimento e privacidade para momentos únicos. Um espaço reservado para receber convidados especiais, conectando conforto e sofisticação.</p>
+</section>
+
+<!-- CTA 1: CONHEÇA CADA DETALHE -->
+<section class="cta-parallax cta-1">
+  <div class="cta-parallax-inner">
+    <h2>Conheça cada detalhe!</h2>
+    <a href="#formulario" class="btn-cta">FAÇA UMA VISITA</a>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais">
+  <img class="elemento-2" src="https://elago.com.br/images/elemento-2.png" alt="" aria-hidden="true" />
+  <div class="dif-grid">
+    <div class="dif-card">
+      <div class="dif-img-wrap">
+        <img src="https://elago.com.br/rn.png" alt="Refúgio Natural" />
+      </div>
+      <div class="dif-label">Refúgio Natural</div>
+      <p>Você irá desconectar seus convidados e transportá-los para um refúgio cercado pela natureza: árvores, lago e tranquilidade.</p>
+    </div>
+    <div class="dif-card">
+      <div class="dif-img-wrap">
+        <img src="https://elago.com.br/lt.png" alt="Liberdade Total" />
+      </div>
+      <div class="dif-label">Liberdade Total</div>
+      <p>Você escolhe seus fornecedores. Aqui, o cenário se adapta aos seus sonhos.</p>
+    </div>
+    <div class="dif-card">
+      <div class="dif-img-wrap">
+        <img src="https://elago.com.br/s.png" alt="Sofisticação" />
+      </div>
+      <div class="dif-label">Sofisticação</div>
+      <p>Espaços planejados para unir beleza, conforto e praticidade, ideal para celebrações ou negócios.</p>
+    </div>
+    <div class="dif-card">
+      <div class="dif-img-wrap">
+        <img src="https://elago.com.br/v.png" alt="Versatilidade" />
+      </div>
+      <div class="dif-label">Versatilidade</div>
+      <p>Do grande ao íntimo. Seja qual for o seu evento, o Elago Eventos se molda para receber com excelência.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA DE FOTOS -->
+<section id="galeria">
+  <h2 class="gal-title">GALERIA DE FOTOS</h2>
+  <div class="gal-slider">
+    <div class="gal-track" id="galTrack">
+      <div class="gal-slide"><img src="https://elago.com.br/images/g1.jpg" alt="Galeria 1" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g2.jpg" alt="Galeria 2" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g3.jpg" alt="Galeria 3" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g4.jpg" alt="Galeria 4" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g5.jpg" alt="Galeria 5" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g6.jpg" alt="Galeria 6" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g7.jpg" alt="Galeria 7" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g8.jpg" alt="Galeria 8" /></div>
+      <div class="gal-slide"><img src="https://elago.com.br/images/g9.jpg" alt="Galeria 9" /></div>
+    </div>
+    <button class="gal-btn prev" id="galPrev" aria-label="Anterior">&#8249;</button>
+    <button class="gal-btn next" id="galNext" aria-label="Próximo">&#8250;</button>
+    <div class="gal-dots" id="galDots" role="tablist" aria-label="Navegação da galeria"></div>
+  </div>
+</section>
+
+<!-- ESPAÇOS -->
+<section id="espacos">
+  <div class="espacos-wrapper">
+  <div class="espacos-grid">
+    <div class="espacos-foto"></div>
+    <div class="espacos-carousel">
+      <div class="area-track-wrap">
+        <div class="area-track" id="areaTrack">
+          <div class="area-slide"><img src="https://elago.com.br/images/area1.jpg" alt="Varanda" /></div>
+          <div class="area-slide"><img src="https://elago.com.br/images/area2.jpg" alt="Piscina" /></div>
+          <div class="area-slide"><img src="https://elago.com.br/images/area3.jpg" alt="Salão" /></div>
+          <div class="area-slide"><img src="https://elago.com.br/images/area4.jpg" alt="Casa" /></div>
+        </div>
+      </div>
+      <button class="area-btn prev" id="areaPrev" aria-label="Anterior">&#8249;</button>
+      <button class="area-btn next" id="areaNext" aria-label="Próximo">&#8250;</button>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- CTA 2: REALIZE O INESQUECÍVEL -->
+<section class="cta-parallax cta-2">
+  <div class="cta-parallax-inner">
+    <h2>Realize o Inesquecível!</h2>
+    <a href="#formulario" class="btn-cta">FAÇA SUA RESERVA!</a>
+  </div>
+</section>
+
+<!-- PRINCIPAIS EVENTOS -->
+<section id="eventos">
+  <h2 class="eventos-title">PRINCIPAIS EVENTOS</h2>
+  <div class="eventos-wrap">
+    <div class="eventos-track" id="eventosTrack">
+      <div class="evento-card">
+        <h3>Casamento</h3>
+        <img src="https://elago.com.br/images/ar1.png" alt="Casamento" />
+      </div>
+      <div class="evento-card">
+        <h3>Formatura</h3>
+        <img src="https://elago.com.br/images/ar2.png" alt="Formatura" />
+      </div>
+      <div class="evento-card">
+        <h3>Corporativo</h3>
+        <img src="https://elago.com.br/images/ar3.png" alt="Corporativo" />
+      </div>
+      <div class="evento-card">
+        <h3>Debutante</h3>
+        <img src="https://elago.com.br/images/ar4.png" alt="Debutante" />
+      </div>
+      <div class="evento-card">
+        <h3>Show</h3>
+        <img src="https://elago.com.br/images/ar5.png" alt="Show" />
+      </div>
+      <div class="evento-card">
+        <h3>Confraternização</h3>
+        <img src="https://elago.com.br/images/ar6.png" alt="Confraternização" />
+      </div>
+      <div class="evento-card">
+        <h3>Aniversário</h3>
+        <img src="https://elago.com.br/images/ar7.png" alt="Aniversário" />
+      </div>
+      <div class="evento-card">
+        <h3>Leilão</h3>
+        <img src="https://elago.com.br/images/ar8.png" alt="Leilão" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <img class="elemento-3" src="https://elago.com.br/images/elemento-3.png" alt="" aria-hidden="true" />
+  <div class="contato-grid">
+    <div class="contato-left">
+      <img class="topo-c" src="https://elago.com.br/topo-c.png" alt="" aria-hidden="true" />
+      <div class="contato-info">
+        <h2 class="contato-title">Entre em contato e tire suas dúvidas!</h2>
+        <div class="contato-item">
+          <div class="contato-icon-circle">
+            <!-- WhatsApp icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+            </svg>
+          </div>
+          <button id="contato-wpp-link" class="contato-wpp-link">Envie uma mensagem</button>
+        </div>
+        <div class="contato-item">
+          <div class="contato-icon-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <span>contato@elago.com.br</span>
+        </div>
+        <div class="contato-social">
+          <p>Acompanhe nosso portfólio</p>
+          <div class="social-links">
+            <a class="social-link" href="https://facebook.com/elagoeventos" target="_blank" rel="noopener" aria-label="Facebook">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+            <a class="social-link" href="https://instagram.com/elagoeventos" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contato-right">
+      <div class="contato-address">
+        <span class="contato-address-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </span>
+        <p>Estrada Municipal, Eng. Schimidt, s/n - Km 4 / Cedral/SP, 15895-000</p>
+      </div>
+      <div class="contato-map">
+        <iframe
+          src="https://maps.google.com/maps?q=Elago+Eventos,+Cedral,+SP,+Brasil&output=embed&z=15"
+          width="100%"
+          height="340"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          title="Localização Elago Eventos"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULÁRIO -->
+<section id="formulario">
+  <div class="form-wrap">
     <LeadForm
-      formId="lead-form"
+      formId="elago-contato"
       project={config.project_slug}
       submitUrl={config.forms['lead-form'].webhooks[0]}
-      redirectUrl={config.forms['lead-form'].redirect_on_success}
-      submitText="Enviar"
-      honeypot
+      submitText="ENVIAR"
+      prefix="elago"
+      fields={getPreset(config.forms['lead-form'].preset) as any}
+      successTitle="Mensagem enviada!"
+      successText="Entraremos em contato em breve."
     />
-  </section>
+  </div>
+</section>
+
+<!-- VOLTAR AO TOPO -->
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Elago Eventos. Todos os direitos reservados</p>
+</footer>
+
+<script>
+// Helper: get slide width in px — uses the first slide for accuracy
+function slideW(container, slides) {
+  const first = slides && slides[0];
+  return first ? first.getBoundingClientRect().width : container.getBoundingClientRect().width;
+}
+
+// Salão carousel (autoplay + dash dots)
+(function () {
+  const track = document.getElementById('salaoTrack');
+  const dotsEl = document.getElementById('salaoDots');
+  const container = track && track.parentElement;
+  if (!track || !dotsEl || !container) return;
+  const slides = track.querySelectorAll('.salao-slide');
+  const total = slides.length;
+  if (total === 0) return;
+  let cur = 0;
+  let timer;
+
+  const dots = [];
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('button');
+    d.className = 'salao-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i + 1));
+    d.addEventListener('click', function () { clearInterval(timer); goTo(i); startTimer(); });
+    dotsEl.appendChild(d);
+    dots.push(d);
+  }
+
+  function goTo(idx) {
+    cur = (idx + total) % total;
+    track.style.transform = 'translateX(-' + (cur * slideW(container, slides)) + 'px)';
+    dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
+  }
+
+  function startTimer() {
+    timer = setInterval(function () { goTo(cur + 1); }, 4000);
+  }
+
+  startTimer();
+})();
+
+// Casa carousel (autoplay, no dots)
+(function () {
+  const track = document.getElementById('casaTrack');
+  const container = track && track.parentElement;
+  if (!track || !container) return;
+  const slides = track.querySelectorAll('.casa-slide');
+  const total = slides.length;
+  if (total === 0) return;
+  let cur = 0;
+
+  setInterval(function () {
+    cur = (cur + 1) % total;
+    track.style.transform = 'translateX(-' + (cur * slideW(container, slides)) + 'px)';
+  }, 4200);
+})();
+
+// Galeria slider
+(function () {
+  const track = document.getElementById('galTrack');
+  const dotsEl = document.getElementById('galDots');
+  const container = track && track.parentElement;
+  if (!track || !dotsEl || !container) return;
+  const slides = track.querySelectorAll('.gal-slide');
+  const total = slides.length;
+  if (total === 0) return;
+  let cur = 0;
+  let timer;
+
+  const dots = [];
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('button');
+    d.className = 'gal-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Foto ' + (i + 1));
+    d.addEventListener('click', function () { clearInterval(timer); goTo(i); startTimer(); });
+    dotsEl.appendChild(d);
+    dots.push(d);
+  }
+
+  function goTo(idx) {
+    cur = idx;
+    track.style.transform = 'translateX(-' + (cur * slideW(container, slides)) + 'px)';
+    dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
+  }
+
+  function startTimer() {
+    timer = setInterval(function () { goTo((cur + 1) % total); }, 4500);
+  }
+
+  document.getElementById('galPrev').addEventListener('click', function () {
+    clearInterval(timer); goTo((cur - 1 + total) % total); startTimer();
+  });
+  document.getElementById('galNext').addEventListener('click', function () {
+    clearInterval(timer); goTo((cur + 1) % total); startTimer();
+  });
+
+  startTimer();
+})();
+
+// Área carousel (Espaços)
+(function () {
+  const track = document.getElementById('areaTrack');
+  const carousel = track && track.closest('.espacos-carousel');
+  if (!track || !carousel) return;
+  const slides = track.querySelectorAll('.area-slide');
+  const total = slides.length;
+  if (total === 0) return;
+  let cur = 0;
+  let timer;
+
+  function goTo(idx) {
+    cur = (idx + total) % total;
+    const w = carousel.getBoundingClientRect().width;
+    track.style.transform = 'translateX(-' + (cur * w) + 'px)';
+  }
+
+  function startTimer() { timer = setInterval(function () { goTo(cur + 1); }, 3200); }
+  function resetTimer() { clearInterval(timer); startTimer(); }
+
+  document.getElementById('areaPrev').addEventListener('click', function () { goTo(cur - 1); resetTimer(); });
+  document.getElementById('areaNext').addEventListener('click', function () { goTo(cur + 1); resetTimer(); });
+
+  // Swipe mobile
+  let touchStartX = 0;
+  carousel.addEventListener('touchstart', function (e) {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  carousel.addEventListener('touchend', function (e) {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) { goTo(diff > 0 ? cur + 1 : cur - 1); resetTimer(); }
+  }, { passive: true });
+
+  startTimer();
+})();
+
+// Principais Eventos — multi-item autoplay carousel
+(function () {
+  const wrap = document.querySelector('.eventos-wrap');
+  const track = document.getElementById('eventosTrack');
+  if (!track || !wrap) return;
+  const cards = track.querySelectorAll('.evento-card');
+  const total = cards.length;
+  if (total === 0) return;
+  let cur = 0;
+
+  function getPerView() {
+    if (window.innerWidth >= 992) return 4;
+    if (window.innerWidth >= 576) return 2;
+    return 1;
+  }
+
+  function advance() {
+    const perView = getPerView();
+    const maxPos = total - perView;
+    cur = cur >= maxPos ? 0 : cur + 1;
+    const cardWidth = cards[0].getBoundingClientRect().width;
+    track.style.transform = 'translateX(-' + (cur * cardWidth) + 'px)';
+  }
+
+  setInterval(advance, 2800);
+})();
+
+// Botão WhatsApp no card de contato
+(function () {
+  const link = document.getElementById('contato-wpp-link');
+  if (!link) return;
+  link.addEventListener('click', function (e) {
+    e.stopPropagation();
+    document.getElementById('wa-toggle')?.click();
+  });
+})();
+
+
+// Nav scroll highlight
+(function () {
+  const sectionIds = ['top', 'sobre', 'ambientes', 'diferenciais', 'galeria', 'contato'];
+  const links = document.querySelectorAll('#main-nav a');
+  function update() {
+    const y = window.scrollY + 100;
+    let active = 'top';
+    for (let i = 0; i < sectionIds.length; i++) {
+      const el = document.getElementById(sectionIds[i]);
+      if (el && el.offsetTop <= y) active = sectionIds[i];
+    }
+    links.forEach(function (a) {
+      const href = (a.getAttribute('href') || '').replace('#', '');
+      a.classList.toggle('active', href === active);
+    });
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// Mobile menu toggle
+(function () {
+  const btn = document.getElementById('menuToggle');
+  const nav = document.getElementById('main-nav');
+  if (!btn || !nav) return;
+  btn.addEventListener('click', function () {
+    const open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+  nav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+
+</script>
 
 </Base>

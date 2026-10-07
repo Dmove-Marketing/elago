@@ -1,0 +1,36 @@
+---
+---
+
+<script>
+  (function() {
+    // Ajustar com base no tempo real de engajamento do GA4 (Explorar > tempo até primeira interação)
+    const FALLBACK_TIMEOUT_MS = 4000;
+
+    let fired = false;
+
+    function fireInteraction() {
+      if (fired) return;
+      fired = true;
+
+      const eventId = crypto.randomUUID();
+
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: 'user_interaction',
+        event_id: eventId
+      });
+
+      interactionEvents.forEach(evt =>
+        window.removeEventListener(evt, fireInteraction)
+      );
+      clearTimeout(fallbackTimer);
+    }
+
+    const interactionEvents = ['scroll', 'click', 'touchstart', 'keydown'];
+    interactionEvents.forEach(evt =>
+      window.addEventListener(evt, fireInteraction, { passive: true, once: true })
+    );
+
+    const fallbackTimer = setTimeout(fireInteraction, FALLBACK_TIMEOUT_MS);
+  })();
+</script>

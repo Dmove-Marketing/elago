@@ -1,34 +1,40 @@
 {
-  "project_name": "Nome do Projeto",
-  "project_slug": "slug-do-projeto",
-  "client": "Nome do Cliente",
-  "environment": "development",
+  "project_name": "Elago Eventos",
+  "project_slug": "elago",
+  "client": "Elago Eventos",
+  "environment": "production",
   "tracking": {
     "gtm_id": "GTM-XXXXXXX",
-    "enabled": true
+    "enabled": false
   },
   "forms": {
     "lead-form": {
       "id": "lead-form",
+      "preset": "social",
       "redirect_on_success": "",
       "webhooks": [
-        "https://n8n.dmove.com.br/webhook/SLUG-DO-PROJETO"
+        "https://n8n.dmove.com.br/webhook/elago"
       ],
       "fields_required": [
         "nome",
-        "email",
-        "telefone"
+        "telefone",
+        "email"
       ]
     }
+  },
+  "whatsapp": {
+    "phone": "5517997546177",
+    "display_name": "Elago Eventos",
+    "avatar": "/images/favicon.png"
   },
   "deploy": {
     "user": "root",
     "server": "",
-    "remote_path": "/var/www/dominio.com.br"
+    "remote_path": "/var/www/elago.com.br"
   },
   "meta": {
-    "created_at": "YYYY-MM-DD",
-    "last_updated": "YYYY-MM-DD",
-    "owner": "Responsável"
+    "created_at": "2026-09-30",
+    "last_updated": "2026-09-30",
+    "owner": "Dmove"
   }
 }
