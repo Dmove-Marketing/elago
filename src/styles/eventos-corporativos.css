@@ -390,9 +390,6 @@ p{margin:0}
 .site-footer .linha-topo{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;padding-bottom:40px;border-bottom:1px solid var(--cor-linha-clara)}
 .site-footer .logo img{height:54px;width:auto}
 .site-footer address{font-style:normal;line-height:1.28;max-width:40ch}
-.site-footer .social{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--cor-bege);letter-spacing:.08em;font-size:16px}
-.site-footer .social svg{width:20px;height:20px;stroke:currentColor}
-.site-footer .social:hover{color:var(--cor-branco)}
 .site-footer .linha-base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:28px;font-size:14px;letter-spacing:.03em}
 
 /* CTA fixo no celular */
