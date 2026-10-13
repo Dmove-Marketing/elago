@@ -4,8 +4,8 @@
   "client": "Elago Eventos",
   "environment": "production",
   "tracking": {
-    "gtm_id": "GTM-XXXXXXX",
-    "enabled": false
+    "gtm_id": "GTM-WPPKNPF2",
+    "enabled": true
   },
   "forms": {
     "lead-form": {
