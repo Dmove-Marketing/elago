@@ -46,9 +46,9 @@ export const trackingParamKeys = [
   'fbc', 'fbp', 'external_id', 'event_id',
 ];
 
-// Deriva "Landing page/<slug>" a partir da URL atual, sem precisar configurar
-// nada manualmente por página. A home (slug vazio) é a landing de casamentos.
+// Rótulo de origem do lead ("Fonte" no payload): "Landing page/<slug>", com a raiz como "home".
+// Os parâmetros de tracking vão em campos próprios do payload, não no Fonte.
 export function getPageSource(pathname: string): string {
   const slug = pathname.replace(/\/$/, '').split('/').filter(Boolean)[0];
-  return `Landing page/${slug || 'casamentos'}`;
+  return `Landing page/${slug || 'home'}`;
 }

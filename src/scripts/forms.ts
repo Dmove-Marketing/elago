@@ -1,7 +1,7 @@
 import flatpickr from 'flatpickr';
 import { Portuguese } from 'flatpickr/dist/l10n/pt';
 import 'flatpickr/dist/flatpickr.min.css';
-import { keyMap } from './lead-payload';
+import { keyMap, getPageSource } from './lead-payload';
 
 function applyPhoneMask(input: HTMLInputElement) {
   input.addEventListener('input', () => {
@@ -126,7 +126,7 @@ export function initForms() {
       const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
       const capitalizedFields: Record<string, string> = {};
-      let fonteBase = rawData['fonte'] || project;
+      const fonte = rawData['fonte'] || form.dataset.fonte || getPageSource(window.location.pathname);
       Object.entries(rawData).forEach(([key, val]) => {
         if (key === 'fonte') return;
         const capKey = keyMap[key] ?? (key.charAt(0).toUpperCase() + key.slice(1));
@@ -144,12 +144,8 @@ export function initForms() {
       if (!tracking['fbp']) tracking['fbp'] = lerCookie('_fbp');
       if (!tracking['fbc']) tracking['fbc'] = lerCookie('_fbc');
 
-      const qs = new URLSearchParams();
-      trackingParamKeys.forEach(k => { if (tracking[k]) qs.set(k, tracking[k]); });
-      const fonte = qs.toString() ? `${fonteBase}?${qs.toString()}` : fonteBase;
-
       // Um campo por sinal de tracking, para o n8n usar direto (UTMs, click IDs, Meta CAPI, origem).
-      // O "Fonte" continua com tudo na query string, por compatibilidade com os fluxos que já leem dele.
+      // O "Fonte" leva só o rótulo da origem (Landing page/<slug>).
       const camposTracking: Record<string, string> = {};
       [...trackingParamKeys, 'landing_page', 'referrer'].forEach((k) => { if (tracking[k]) camposTracking[k] = tracking[k]; });
 

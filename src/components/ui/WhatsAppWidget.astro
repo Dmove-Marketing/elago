@@ -381,11 +381,8 @@ const introMessages = [
     const a = state.answers;
     const trackingRaw = sessionStorage.getItem('dmove_tracking');
     const tracking = trackingRaw ? JSON.parse(trackingRaw) : {};
-    const qs = new URLSearchParams();
-    trackingParamKeys.forEach((k) => { if (tracking[k]) qs.set(k, tracking[k]); });
     const slug = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean)[0];
-    const pageSource = `Landing page/${slug || 'casamentos'}`;
-    const fonte = qs.toString() ? `${pageSource}?${qs.toString()}` : pageSource;
+    const pageSource = `Landing page/${slug || 'home'}`;
 
     const now = new Date();
     const payload = {
@@ -396,7 +393,7 @@ const introMessages = [
       'Data do evento': a.data_evento?.value || '',
       Convidados: a.convidados?.value || '',
       'Tipo de evento': a.tipo_evento?.value || '',
-      Fonte: fonte,
+      Fonte: pageSource,
       Data: now.toLocaleDateString('pt-BR'),
       'Horário': now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       'URL da página': window.location.href,
@@ -410,7 +407,7 @@ const introMessages = [
       const m = document.cookie.match('(^|;)\\s*_' + k + '\\s*=\\s*([^;]+)');
       if (!tracking[k] && m) tracking[k] = decodeURIComponent(m.pop());
     });
-    // um campo por sinal de tracking (UTMs, click IDs, Meta CAPI, origem), além do Fonte
+    // um campo por sinal de tracking (UTMs, click IDs, Meta CAPI, origem)
     [...trackingParamKeys, 'landing_page', 'referrer'].forEach((k) => { if (tracking[k]) payload[k] = tracking[k]; });
 
     try {
