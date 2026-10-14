@@ -139,21 +139,19 @@ export function initForms() {
         'fbclid', 'ttclid', 'msclkid', 'sck',
         'fbc', 'fbp', 'external_id', 'event_id',
       ];
-      const qs = new URLSearchParams();
-      trackingParamKeys.forEach(k => { if (tracking[k]) qs.set(k, tracking[k]); });
-      const fonte = qs.toString() ? `${fonteBase}?${qs.toString()}` : fonteBase;
-
       // _fbp/_fbc lidos agora: na 1ª visita o Pixel cria o cookie depois do UTMCapture rodar
       const lerCookie = (n: string) => { const m = document.cookie.match('(^|;)\\s*' + n + '\\s*=\\s*([^;]+)'); return m ? decodeURIComponent(m.pop() as string) : ''; };
       if (!tracking['fbp']) tracking['fbp'] = lerCookie('_fbp');
       if (!tracking['fbc']) tracking['fbc'] = lerCookie('_fbc');
 
-      // Campos Meta CAPI — enviados também como campos flat para uso direto no n8n
-      const metaCapi: Record<string, string> = {};
-      if (tracking['fbc'])         metaCapi['fbc']         = tracking['fbc'];
-      if (tracking['fbp'])         metaCapi['fbp']         = tracking['fbp'];
-      if (tracking['external_id']) metaCapi['external_id'] = tracking['external_id'];
-      if (tracking['event_id'])    metaCapi['event_id']    = tracking['event_id'];
+      const qs = new URLSearchParams();
+      trackingParamKeys.forEach(k => { if (tracking[k]) qs.set(k, tracking[k]); });
+      const fonte = qs.toString() ? `${fonteBase}?${qs.toString()}` : fonteBase;
+
+      // Um campo por sinal de tracking, para o n8n usar direto (UTMs, click IDs, Meta CAPI, origem).
+      // O "Fonte" continua com tudo na query string, por compatibilidade com os fluxos que já leem dele.
+      const camposTracking: Record<string, string> = {};
+      [...trackingParamKeys, 'landing_page', 'referrer'].forEach((k) => { if (tracking[k]) camposTracking[k] = tracking[k]; });
 
       const payload: Record<string, string> = {
         ...capitalizedFields,
@@ -166,7 +164,7 @@ export function initForms() {
         'Desenvolvido por': 'Dmove',
         form_id: formId,
         form_name: formId,
-        ...metaCapi,
+        ...camposTracking,
       };
 
       try {

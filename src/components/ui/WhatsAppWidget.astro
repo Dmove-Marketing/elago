@@ -410,7 +410,8 @@ const introMessages = [
       const m = document.cookie.match('(^|;)\\s*_' + k + '\\s*=\\s*([^;]+)');
       if (!tracking[k] && m) tracking[k] = decodeURIComponent(m.pop());
     });
-    ['fbc', 'fbp', 'external_id', 'event_id'].forEach((k) => { if (tracking[k]) payload[k] = tracking[k]; });
+    // um campo por sinal de tracking (UTMs, click IDs, Meta CAPI, origem), além do Fonte
+    [...trackingParamKeys, 'landing_page', 'referrer'].forEach((k) => { if (tracking[k]) payload[k] = tracking[k]; });
 
     try {
       if (submitUrl) {
