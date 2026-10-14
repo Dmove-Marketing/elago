@@ -121,6 +121,13 @@ const introMessages = [
       <p class="wa-inputbar__error" id="wa-error" role="alert" hidden></p>
     </div>
   </div>
+
+  <!-- Espelho das respostas para o GTM (Enhanced Conversions lê nome/telefone/e-mail daqui quando form_source = whatsapp) -->
+  <form data-wa-form hidden aria-hidden="true" onsubmit="return false">
+    <input type="hidden" name="Nome" />
+    <input type="hidden" name="WhatsApp" />
+    <input type="hidden" name="E-mail" />
+  </form>
 </div>
 
 <script define:vars={{ submitUrl, project, trackingParamKeys, phone, fields, introMessages, avatar }}>
@@ -353,6 +360,11 @@ const introMessages = [
     link.href = waUrl();
     link.target = '_blank';
     link.rel = 'noopener';
+    // depois do lead: só GA4 (não é Contact, a pessoa já virou Lead)
+    link.addEventListener('click', () => {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'whatsapp_click', click_type: 'continuar_conversa', link_location: 'popup', project: project });
+    });
     link.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.852L.057 23.428a.5.5 0 0 0 .614.614l5.576-1.475A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg> Continuar no WhatsApp`;
     bubbleHtml('agent', link);
   }
@@ -405,6 +417,14 @@ const introMessages = [
         });
       }
     } catch (_) { /* falha silenciosa */ }
+
+    // preenche o espelho antes do push: o GTM lê a PII do DOM, não do dataLayer
+    const espelho = document.querySelector('[data-wa-form]');
+    if (espelho) {
+      espelho.querySelector('[name="Nome"]').value = payload.Nome;
+      espelho.querySelector('[name="WhatsApp"]').value = payload.WhatsApp;
+      espelho.querySelector('[name="E-mail"]').value = payload['E-mail'];
+    }
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
@@ -511,7 +531,12 @@ const introMessages = [
   }
 
   /* ── Abrir / fechar ─────────────────────────── */
-  function openPopup() {
+  function openPopup(origem) {
+    // Conversão Contact: abrir o popup (não fechar) dispara whatsapp_click, sem PII, uma vez por abertura
+    if (popup.hidden) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'whatsapp_click', click_type: 'abrir_popup', link_location: origem || 'flutuante', project: project });
+    }
     hideTeaser(false);
     popup.hidden = false;
     requestAnimationFrame(() => requestAnimationFrame(() => popup.classList.add('wa-popup--open')));
@@ -535,7 +560,7 @@ const introMessages = [
   }
 
   toggle.addEventListener('click', () => {
-    popup.hidden ? openPopup() : closePopup();
+    popup.hidden ? openPopup('flutuante') : closePopup();
   });
   closeBtn.addEventListener('click', closePopup);
 
@@ -560,7 +585,7 @@ const introMessages = [
   });
   document.getElementById('wa-teaser-open')?.addEventListener('click', () => {
     try { sessionStorage.setItem('wa_teaser_off', '1'); } catch (_) {}
-    openPopup();
+    openPopup('teaser');
   });
 
   // O calendário (flatpickr) é anexado ao <body>, FORA do popup. Enquanto ele

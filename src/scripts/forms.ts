@@ -52,7 +52,7 @@ export function initForms() {
     form.addEventListener('focusin', () => {
       if (!started) {
         started = true;
-        (window as any).dataLayer?.push({ event: 'form_start', form_id: formId, project });
+        (window as any).dataLayer?.push({ event: 'form_start', form_source: 'form', form_id: formId, project });
       }
     });
 
@@ -176,11 +176,24 @@ export function initForms() {
         let json: any = {};
         try { json = await res.json(); } catch {}
 
-        (window as any).dataLayer?.push({ event: 'form_submit', form_id: formId, project, ...capitalizedFields });
-
         const redir = redirectUrl || json.redirect;
+
+        // dataLayer limpo, SEM PII: o GTM lê nome/telefone/e-mail do DOM deste formulário (form[data-form-id]).
+        // Com redirect, espera o GTM disparar as tags (eventCallback) antes de navegar; sem GTM, cai no setTimeout.
+        let navegou = false;
+        const navegar = () => { if (navegou || !redir) return; navegou = true; window.location.href = redir; };
+        (window as any).dataLayer?.push({
+          ...(redir ? { eventCallback: navegar, eventTimeout: 800 } : {}),
+          event: 'form_submit',
+          form_source: 'form',
+          form_id: formId,
+          project,
+          tipo_evento: rawData['tipo_evento'] || '',
+          event_id: tracking['event_id'] || (window as any).__page_event_id || '',
+        });
+
         if (redir) {
-          window.location.href = redir;
+          setTimeout(navegar, 900);
           return;
         }
 
@@ -199,7 +212,7 @@ export function initForms() {
             </div>`;
         }
       } catch (err: any) {
-        (window as any).dataLayer?.push({ event: 'form_error', form_id: formId, error: err.message });
+        (window as any).dataLayer?.push({ event: 'form_error', form_source: 'form', form_id: formId, error: err.message });
 
         if (msgEl) {
           msgEl.innerHTML = 'Erro ao enviar. Tente novamente mais tarde.';

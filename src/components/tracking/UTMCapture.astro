@@ -2,49 +2,80 @@
 ---
 
 <script>
-  (function() {
+  (function () {
     const params = new URLSearchParams(window.location.search);
+    const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    const clickIdKeys = ['gclid', 'gbraid', 'wbraid', 'fbclid', 'sck', 'ttclid', 'msclkid'];
+    const UTM_DAYS = 90;
 
-    const utmKeys = [
-      'utm_source', 'utm_medium', 'utm_campaign',
-      'utm_content', 'utm_term'
-    ];
-
-    const clickIdKeys = ['gclid', 'fbclid', 'sck', 'ttclid', 'msclkid'];
-
-    const trackingData: Record<string, string> = {};
-
-    utmKeys.forEach(key => {
-      const value = params.get(key);
-      if (value) trackingData[key] = value;
-    });
-
-    clickIdKeys.forEach(key => {
-      const value = params.get(key);
-      if (value) trackingData[key] = value;
-    });
-
-    if (document.referrer && !document.referrer.includes(window.location.hostname)) {
-      trackingData['referrer'] = document.referrer;
+    function setCookie(name: string, value: string, days: number) {
+      const d = new Date();
+      d.setTime(d.getTime() + days * 864e5);
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+    }
+    function getCookie(name: string): string {
+      const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+      return m ? decodeURIComponent(m.pop() as string) : '';
+    }
+    function uuid(): string {
+      const c: any = (window as any).crypto;
+      if (c && c.randomUUID) return c.randomUUID();
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (ch) => {
+        const r = (Math.random() * 16) | 0;
+        return (ch === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      });
     }
 
-    trackingData['landing_page'] = window.location.pathname;
-    trackingData['landing_url'] = window.location.href.split('?')[0];
+    const tracking: Record<string, string> = {};
+
+    // UTMs → cookie persistente (só grava quando vem na URL; senão usa o cookie existente)
+    utmKeys.forEach((k) => {
+      const v = params.get(k);
+      if (v) setCookie(k, v, UTM_DAYS);
+      const val = v || getCookie(k);
+      if (val) tracking[k] = val;
+    });
+
+    // Click IDs → cookie persistente
+    clickIdKeys.forEach((k) => {
+      const v = params.get(k);
+      if (v) setCookie(k, v, UTM_DAYS);
+      const val = v || getCookie(k);
+      if (val) tracking[k] = val;
+    });
+
+    // _external_id — identificador first-party estável (Enhanced Conv. / CAPI)
+    let externalId = getCookie('_external_id');
+    if (!externalId) {
+      externalId = uuid();
+      setCookie('_external_id', externalId, 365);
+    }
+    tracking['external_id'] = externalId;
+
+    // _fbp / _fbc do Pixel (se existirem) para o CAPI
+    const fbp = getCookie('_fbp');
+    if (fbp) tracking['fbp'] = fbp;
+    let fbc = getCookie('_fbc');
+    if (!fbc && params.get('fbclid')) fbc = `fb.1.${Date.now()}.${params.get('fbclid')}`;
+    if (fbc) tracking['fbc'] = fbc;
+
+    // event_id por pageview — mesmo valor no Pixel (browser) e no webhook (server) → dedup
+    const eventId = uuid();
+    (window as any).__page_event_id = eventId;
+    tracking['event_id'] = eventId;
+
+    if (document.referrer && !document.referrer.includes(window.location.hostname)) {
+      tracking['referrer'] = document.referrer;
+    }
+    tracking['landing_page'] = window.location.pathname;
 
     if (!sessionStorage.getItem('dmove_first_visit')) {
       sessionStorage.setItem('dmove_first_visit', new Date().toISOString());
     }
-
-    const hasNewParams = utmKeys.some(k => trackingData[k]) || clickIdKeys.some(k => trackingData[k]);
-    if (hasNewParams) {
-      sessionStorage.setItem('dmove_tracking', JSON.stringify(trackingData));
-    }
+    // cache por página para o forms.ts (o webhook lê daqui)
+    try { sessionStorage.setItem('dmove_tracking', JSON.stringify(tracking)); } catch (_) {}
 
     (window as any).dataLayer = (window as any).dataLayer || [];
-    (window as any).dataLayer.push({
-      event: 'page_meta',
-      page_path: window.location.pathname,
-      ...trackingData
-    });
+    (window as any).dataLayer.push({ event: 'page_meta', page_path: window.location.pathname, ...tracking });
   })();
 </script>
