@@ -405,6 +405,11 @@ const introMessages = [
       form_id: 'form_whatsapp',
       form_name: 'form_whatsapp',
     };
+    // _fbp/_fbc lidos agora: na 1ª visita o Pixel cria o cookie depois do UTMCapture rodar
+    ['fbp', 'fbc'].forEach((k) => {
+      const m = document.cookie.match('(^|;)\\s*_' + k + '\\s*=\\s*([^;]+)');
+      if (!tracking[k] && m) tracking[k] = decodeURIComponent(m.pop());
+    });
     ['fbc', 'fbp', 'external_id', 'event_id'].forEach((k) => { if (tracking[k]) payload[k] = tracking[k]; });
 
     try {
