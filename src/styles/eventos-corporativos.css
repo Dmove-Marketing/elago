@@ -1,3 +1,10 @@
+/* Bangkok Sapture — manuscrita para palavras-chave */
+@font-face{
+  font-family:"Bangkok Sapture";
+  src:url("/fonts/bangkok-sapture.otf") format("opentype");
+  font-weight:400;font-style:normal;font-display:swap;
+}
+
 /* =========================================================
    TOKENS — somente verde, bege e branco (manual Elago)
    ========================================================= */
@@ -17,6 +24,7 @@
   /* Tipografia — Orpheus Pro (Adobe Fonts) */
   --fonte-titulo:"orpheuspro", Georgia, "Times New Roman", serif;
   --fonte-texto:"orpheuspro", Georgia, "Times New Roman", serif;
+  --fonte-manuscrita:"Bangkok Sapture", "Brush Script MT", cursive;
 
   /* Layout */
   --largura:1240px;
@@ -61,6 +69,10 @@ p{margin:0}
   font-size:clamp(36px, 4.4vw, 60px);line-height:.92;letter-spacing:-.005em;color:var(--cor-verde);
 }
 .destaque{color:var(--cor-bege)}
+.manuscrita{font-family:var(--fonte-manuscrita);font-size:1.3em;line-height:.8;letter-spacing:0;text-transform:none;white-space:nowrap}
+.titulo-secao .manuscrita{display:block;margin:.08em 0 .02em}
+.manuscrita-longa{white-space:normal}
+@media (min-width:768px){.manuscrita-longa{white-space:nowrap;font-size:1.1em}}
 .escuro .titulo-secao{color:var(--cor-branco)}
 
 .cabecalho-secao{max-width:780px;margin:0 auto 64px;text-align:center}
@@ -96,9 +108,9 @@ p{margin:0}
   padding:22px 0;
 }
 .site-header .wrap{display:flex;align-items:center;justify-content:center}
-.site-header .logo img{height:40px;width:auto;transition:height var(--transicao)}
+.site-header .logo img{height:52px;width:auto;transition:height var(--transicao)}
 .site-header.rolado{background:rgba(30,55,0,.97);box-shadow:0 1px 0 rgba(209,189,157,.2);padding:12px 0}
-.site-header.rolado .logo img{height:34px}
+.site-header.rolado .logo img{height:44px}
 
 /* =========================================================
    HERO
@@ -113,22 +125,26 @@ p{margin:0}
 #topo .midia-fundo::after{
   content:"";position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 62% 46% at 50% 64%, rgba(30,55,0,.6) 0%, rgba(30,55,0,0) 100%),
-    linear-gradient(180deg, rgba(30,55,0,.7) 0%, rgba(30,55,0,.25) 24%, rgba(30,55,0,.2) 42%, rgba(30,55,0,.86) 74%, var(--cor-verde) 100%);
+    radial-gradient(ellipse 52% 34% at 50% 66%, rgba(30,55,0,.6) 0%, rgba(30,55,0,0) 100%),
+    linear-gradient(180deg, rgba(30,55,0,.6) 0%, rgba(30,55,0,.16) 20%, rgba(30,55,0,.1) 44%, rgba(30,55,0,.68) 78%, var(--cor-verde) 100%);
 }
 #topo .conteudo-hero{position:relative;z-index:1;width:100%;text-align:center;padding:180px 0 clamp(64px, 9vh, 104px)}
 #topo .sobretitulo{
-  display:inline-flex;align-items:center;gap:14px;
-  font-size:18px;font-weight:500;letter-spacing:.06em;color:var(--cor-bege);margin-bottom:24px;
+  display:flex;justify-content:center;align-items:center;gap:14px;
+  font-size:18px;font-weight:500;letter-spacing:.06em;color:var(--cor-bege);margin:16px 0 0;
   text-shadow:0 1px 12px rgba(30,55,0,.7);
 }
 #topo .sobretitulo span{width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block}
 #topo h1{
-  font-size:clamp(30px, 4.4vw, 64px);line-height:1;letter-spacing:.02em;font-weight:400;text-transform:uppercase;
-  max-width:none;margin:0 auto;color:var(--cor-branco);text-shadow:0 2px 30px rgba(30,55,0,.45);
+  font-size:clamp(30px, 3.6vw, 54px);line-height:1;letter-spacing:.03em;font-weight:400;text-transform:uppercase;
+  max-width:none;margin:0 auto;color:var(--cor-branco);text-shadow:0 2px 24px rgba(30,55,0,.7);
 }
-#topo h1 .destaque{display:block;color:var(--cor-bege)}
-#topo .btn{margin-top:44px}
+#topo h1 .destaque{
+  display:block;margin-top:-.04em;
+  font-family:var(--fonte-manuscrita);font-size:1.45em;line-height:.9;letter-spacing:0;text-transform:none;
+  color:var(--cor-bege);text-shadow:0 1px 2px rgba(30,55,0,.9),0 0 18px rgba(30,55,0,.8);
+}
+#topo .btn{margin-top:36px}
 
 /* =========================================================
    AUTORIDADE
@@ -227,7 +243,7 @@ p{margin:0}
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);
           mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);
 }
-.logos-faixa{display:flex;width:max-content;animation:logos-passando 36s linear infinite}
+.logos-faixa{display:flex;width:max-content;animation:logos-passando 56s linear infinite}
 .logos-trilho:hover .logos-faixa{animation-play-state:paused}
 @keyframes logos-passando{to{transform:translateX(-50%)}}
 .logos-clientes{
@@ -388,7 +404,7 @@ p{margin:0}
    ========================================================= */
 .site-footer{background:var(--cor-verde);color:var(--cor-texto-claro);padding:72px 0 36px;font-size:16px}
 .site-footer .linha-topo{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;padding-bottom:40px;border-bottom:1px solid var(--cor-linha-clara)}
-.site-footer .logo img{height:54px;width:auto}
+.site-footer .logo img{height:70px;width:auto}
 .site-footer address{font-style:normal;line-height:1.28;max-width:40ch}
 .site-footer .linha-base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:28px;font-size:14px;letter-spacing:.03em}
 
@@ -452,10 +468,14 @@ p{margin:0}
 @media (max-width:560px){
   body{font-size:18px}
   .site-header{padding:16px 0}
-  .site-header .logo img{height:32px}
-  .site-header.rolado .logo img{height:28px}
+  .site-header .logo img{height:42px}
+  .site-header.rolado .logo img{height:36px}
   #topo .midia-fundo img{object-position:42% 50%}
   #topo h1{font-size:clamp(28px,8.4vw,36px)}
+  #topo h1 .destaque{font-size:1.15em}
+  #topo .midia-fundo::after{
+    background:linear-gradient(180deg, rgba(30,55,0,.6) 0%, rgba(30,55,0,.1) 28%, rgba(30,55,0,.5) 52%, rgba(30,55,0,.85) 76%, var(--cor-verde) 100%);
+  }
   #topo .sobretitulo{font-size:16px;letter-spacing:.05em}
   .cabecalho-secao{margin-bottom:44px}
   .rotulo{font-size:12px;margin-bottom:18px}

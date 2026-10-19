@@ -15,13 +15,14 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
     <meta name="theme-color" content="#1E3700" />
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
     <link rel="stylesheet" href="https://use.typekit.net/cwh2gwf.css" />
+    <link rel="preload" href="/fonts/bangkok-sapture.otf" as="font" type="font/otf" crossorigin />
   </Fragment>
 
 <!-- ===================== HEADER ===================== -->
 <header class="site-header" id="cabecalho">
   <div class="wrap">
     <a class="logo" href="#topo" aria-label="Elago — voltar ao topo">
-      <img src="/imagens/elago-logo.svg" alt="Elago" width="101" height="40">
+      <img src="/imagens/elago-eventos-logo.svg" alt="Elago Eventos" width="102" height="52">
     </a>
   </div>
 </header>
@@ -31,11 +32,11 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 <!-- ===================== HERO ===================== -->
 <section class="hero" id="topo">
   <div class="midia-fundo">
-    <img src="/imagens/elago-corporativo-hero.jpg" alt="Vista aérea noturna do complexo Elago, com salão, piscina e áreas verdes em Cedral (SP)" width="2400" height="1350" fetchpriority="high">
+    <img src="/imagens/elago-corporativo-hero-noite.jpg" alt="Vista aérea noturna do complexo Elago, com salão, piscina e áreas verdes em Cedral (SP)" width="2000" height="1556" fetchpriority="high">
   </div>
   <div class="wrap conteudo-hero">
-    <p class="sobretitulo">Eventos corporativos <span aria-hidden="true"></span> Cedral</p>
     <h1>Natureza e versatilidade <br class="quebra-desktop">para encontros que vão <span class="destaque">além da sala de reunião</span></h1>
+    <p class="sobretitulo">Eventos corporativos <span aria-hidden="true"></span> Cedral</p>
     <a class="btn btn-claro" href="#contato">Solicite orçamento</a>
   </div>
 </section>
@@ -44,7 +45,7 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 <section class="autoridade" id="autoridade" aria-label="Destaques do Elago">
   <div class="wrap">
     <ul>
-      <li style="--i:0"><span>De <strong><span class="contador" data-alvo="250">250</span> a <span class="contador" data-alvo="1100">1.100</span></strong> convidados</span></li>
+      <li style="--i:0"><span>De <strong><span class="contador" data-alvo="50">50</span> a <span class="contador" data-alvo="700">700</span></strong> convidados</span></li>
       <li style="--i:1"><span>Estrutura versátil</span></li>
       <li style="--i:2"><span>Integração com a natureza</span></li>
     </ul>
@@ -79,7 +80,7 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
   <div class="wrap">
     <div class="cabecalho-secao reveal">
       <span class="rotulo">Espaços</span>
-      <h2 class="titulo-secao"><span>Diferentes ambientes.</span> <span class="destaque">Uma estrutura que se adapta.</span></h2>
+      <h2 class="titulo-secao"><span>Diferentes ambientes.</span> <span class="destaque manuscrita manuscrita-longa">Uma estrutura que se adapta.</span></h2>
     </div>
 
     <div class="grid-espacos">
@@ -87,25 +88,25 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
         <div class="arco"><img src="/imagens/elago-espaco-salao-principal.jpg" alt="Salão principal do Elago, amplo, com colunas e janelas em arco" width="1600" height="1067" loading="lazy" style="object-position:50% 50%"></div>
         <div class="numero">01</div>
         <h3>Salão principal</h3>
-        <p>Com capacidade para até 600 pessoas sentadas ou 1.100 em pé, o salão oferece amplitude para diferentes formatos e configurações de eventos corporativos.</p>
+        <p>Com capacidade para até 700 pessoas confortavelmente ou 1.100 pessoas em formato auditório, o salão oferece versatilidade para diferentes configurações de eventos corporativos.</p>
       </article>
       <article class="espaco reveal" data-atraso="1">
-        <div class="arco"><img src="/imagens/elago-espaco-area-externa.jpg" alt="Área externa do Elago com fachada em arcos e piso de pedra ao entardecer" width="1600" height="1200" loading="lazy" style="object-position:62% 50%"></div>
+        <div class="arco"><img src="/imagens/elago-espaco-area-externa-lago.jpg" alt="Área externa do Elago vista do lago, com o salão em arcos entre as árvores" width="1672" height="941" loading="lazy" style="object-position:62% 50%"></div>
         <div class="numero">02</div>
         <h3>Área externa</h3>
-        <p>Integrada ao entorno natural e com capacidade para até 250 pessoas, é uma alternativa para recepções, confraternizações, encontros e eventos que pedem uma atmosfera mais aberta.</p>
+        <p>Integrada ao entorno natural e com capacidade para até 400 pessoas, é uma alternativa para recepções, confraternizações, encontros e eventos que pedem uma atmosfera mais aberta.</p>
       </article>
       <article class="espaco reveal" data-atraso="2">
         <div class="arco"><img src="/imagens/elago-espaco-varanda-gourmet.jpg" alt="Varanda gourmet do Elago com piscina iluminada e espreguiçadeiras" width="1600" height="1067" loading="lazy" style="object-position:58% 50%"></div>
         <div class="numero">03</div>
         <h3>Varanda gourmet</h3>
-        <p>Um ambiente que pode ser contratado de forma independente ou integrado ao complexo, ampliando as possibilidades de configuração do evento.</p>
+        <p>Ambiente com capacidade para até 250 pessoas, que pode ser contratado de forma independente ou integrado ao complexo, ampliando as possibilidades de configuração do evento.</p>
       </article>
       <article class="espaco reveal" data-atraso="3">
         <div class="arco"><img src="/imagens/elago-espaco-casa-exclusiva.jpg" alt="Sala de estar da casa exclusiva do Elago, com mezanino e janelas para o jardim" width="1600" height="1067" loading="lazy" style="object-position:38% 50%"></div>
         <div class="numero">04</div>
         <h3>Casa exclusiva</h3>
-        <p>Espaço reservado para encontros corporativos que valorizam privacidade, conforto e uma experiência diferenciada.</p>
+        <p>Estrutura de apoio ao anfitrião, com possibilidade de acomodação para até 12 pessoas. Ideal para receber diretores, convidados ou equipes com conforto e privacidade durante os eventos.</p>
       </article>
     </div>
     <p class="dica-arraste" aria-hidden="true">Arraste para ver os ambientes</p>
@@ -171,6 +172,9 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
       <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="Grupo Lukma Electric" width="811" height="240" loading="lazy"></li>
       <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="Rio Preto Country Bulls" width="260" height="240" loading="lazy"></li>
       <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="Kelvin Sistema de Ensino" width="298" height="98" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-unimed.png" alt="Unimed" width="675" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-chiquinho.png" alt="Chiquinho Sorvetes" width="240" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-multidrogas.png" alt="Rede MultiDrogas" width="1108" height="240" loading="lazy"></li>
     </ul>
         <ul class="logos-clientes" aria-hidden="true">
       <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="" width="873" height="240" loading="lazy"></li>
@@ -178,6 +182,9 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
       <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="" width="811" height="240" loading="lazy"></li>
       <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="" width="260" height="240" loading="lazy"></li>
       <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="" width="298" height="98" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-unimed.png" alt="" width="675" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-chiquinho.png" alt="" width="240" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-multidrogas.png" alt="" width="1108" height="240" loading="lazy"></li>
     </ul>
         <ul class="logos-clientes" aria-hidden="true">
       <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="" width="873" height="240" loading="lazy"></li>
@@ -185,6 +192,9 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
       <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="" width="811" height="240" loading="lazy"></li>
       <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="" width="260" height="240" loading="lazy"></li>
       <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="" width="298" height="98" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-unimed.png" alt="" width="675" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-chiquinho.png" alt="" width="240" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-multidrogas.png" alt="" width="1108" height="240" loading="lazy"></li>
     </ul>
         <ul class="logos-clientes" aria-hidden="true">
       <li><img class="logo-largo" src="/imagens/elago-cliente-tereos.png" alt="" width="873" height="240" loading="lazy"></li>
@@ -192,6 +202,9 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
       <li><img class="logo-largo" src="/imagens/elago-cliente-lukma.png" alt="" width="811" height="240" loading="lazy"></li>
       <li><img class="logo-alto" src="/imagens/elago-cliente-rcb.png" alt="" width="260" height="240" loading="lazy"></li>
       <li><img class="logo-largo" src="/imagens/elago-cliente-kelvin.png" alt="" width="298" height="98" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-unimed.png" alt="" width="675" height="240" loading="lazy"></li>
+      <li><img class="logo-alto" src="/imagens/elago-cliente-chiquinho.png" alt="" width="240" height="240" loading="lazy"></li>
+      <li><img class="logo-largo" src="/imagens/elago-cliente-multidrogas.png" alt="" width="1108" height="240" loading="lazy"></li>
     </ul>
       </div>
     </div>
@@ -263,7 +276,7 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
   <div class="wrap">
     <div class="cabecalho-secao reveal">
       <span class="rotulo">Galeria</span>
-      <h2 class="titulo-secao">Veja como o Elago pode <br class="quebra-desktop"><span class="destaque">se transformar</span> para o seu evento</h2>
+      <h2 class="titulo-secao">Veja como o Elago pode <span class="destaque manuscrita">se transformar</span> para o seu evento</h2>
     </div>
     <div class="grid-galeria reveal" id="grid-galeria">
       <button class="g-item g-grande" type="button"><img src="/imagens/elago-galeria-06.jpg" alt="Jantar de gala no salão do Elago, com palco, treliça de iluminação e telão" loading="lazy" width="1600" height="1067"></button>
@@ -394,7 +407,7 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 <footer class="site-footer">
   <div class="wrap">
     <div class="linha-topo">
-      <a class="logo" href="#topo" aria-label="Elago — voltar ao topo"><img src="/imagens/elago-logo.svg" alt="Elago" width="136" height="54" loading="lazy"></a>
+      <a class="logo" href="#topo" aria-label="Elago — voltar ao topo"><img src="/imagens/elago-eventos-logo.svg" alt="Elago Eventos" width="137" height="70" loading="lazy"></a>
       <address>Estrada Municipal, a Engenheiro Schimidt, s/n - Km 4, Cedral - SP, 15895-000</address>
     </div>
     <div class="linha-base">
