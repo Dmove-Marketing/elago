@@ -30,9 +30,9 @@ html, body {
 .bio-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://media.dmove.com.br/clients/elago/photos/Aerea-08.webp');
+  background-image: url('https://media.dmove.com.br/clients/elago/photos/FRENTE_SALAO_3.webp');
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 40%;
   z-index: 0;
 }
 
@@ -40,12 +40,9 @@ html, body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg,
-    rgba(30,55,0,.35) 0%,
-    rgba(30,55,0,.55) 55%,
-    rgba(30,55,0,.92) 90%,
-    #1E3700 100%
-  );
+  background:
+    radial-gradient(ellipse 52% 34% at 50% 66%, rgba(30,55,0,.6) 0%, rgba(30,55,0,0) 100%),
+    linear-gradient(180deg, rgba(30,55,0,.6) 0%, rgba(30,55,0,.16) 20%, rgba(30,55,0,.1) 44%, rgba(30,55,0,.68) 78%, #1E3700 100%);
 }
 
 .bio-branding {
