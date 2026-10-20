@@ -31,8 +31,8 @@ html, body {
   position: absolute;
   inset: 0;
   background-image: url('https://media.dmove.com.br/clients/elago/photos/FRENTE_SALAO_3.webp');
-  background-size: cover;
-  background-position: center 40%;
+  background-size: auto 120%;
+  background-position: center 120%;
   z-index: 0;
 }
 
