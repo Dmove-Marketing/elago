@@ -445,7 +445,8 @@ p{margin:0}
   #autoridade li:last-child{border-bottom:1px solid var(--cor-linha-clara)}
   #autoridade li + li::before{display:none}
 
-  #espacos .titulo-secao{font-size:clamp(20px,5.8vw,36px)}
+  #espacos .titulo-secao{font-size:clamp(24px,6.5vw,36px)}
+  #espacos .titulo-secao .frase-nowrap{display:inline !important;white-space:nowrap}
 
   /* Espaços viram carrossel horizontal */
   .grid-espacos{
