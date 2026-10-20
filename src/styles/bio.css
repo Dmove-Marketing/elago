@@ -45,6 +45,17 @@ html, body {
     linear-gradient(180deg, rgba(30,55,0,.6) 0%, rgba(30,55,0,.16) 20%, rgba(30,55,0,.1) 44%, rgba(30,55,0,.68) 78%, #1E3700 100%);
 }
 
+@media (min-width: 768px) {
+  .bio-bg {
+    background-position: center 70%;
+  }
+  .bio-bg::after {
+    background:
+      radial-gradient(ellipse 52% 34% at 50% 66%, rgba(30,55,0,.35) 0%, rgba(30,55,0,0) 100%),
+      linear-gradient(180deg, rgba(30,55,0,.35) 0%, rgba(30,55,0,.08) 20%, rgba(30,55,0,.04) 44%, rgba(30,55,0,.6) 78%, #1E3700 100%);
+  }
+}
+
 .bio-branding {
   position: relative;
   z-index: 1;
