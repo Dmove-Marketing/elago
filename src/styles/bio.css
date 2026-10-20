@@ -47,6 +47,7 @@ html, body {
 
 @media (min-width: 768px) {
   .bio-bg {
+    background-size: cover;
     background-position: center 70%;
   }
   .bio-bg::after {
