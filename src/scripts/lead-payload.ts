@@ -17,6 +17,8 @@ export const keyMap: Record<string, string> = {
   mensagem: 'Mensagem',
   detalhes_adicionais: 'Mensagem',
   'detalhes adicionais': 'Mensagem',
+  como_descobriu: 'Como descobriu',
+  'como descobriu': 'Como descobriu',
 };
 
 // Opções de "Tipo de evento" — fonte única compartilhada entre os formulários

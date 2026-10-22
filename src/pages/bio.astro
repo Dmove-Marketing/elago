@@ -101,6 +101,21 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
             <input name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Número de convidados" required />
           </div>
           <div class="bio-campo">
+            <select name="como_descobriu" id="bio-como-descobriu" required>
+              <option value="" disabled selected>Como descobriu o Elago Eventos?</option>
+              <option value="Instagram">Instagram</option>
+              <option value="Google">Google</option>
+              <option value="Indicacao">Indicação</option>
+              <option value="Outdoor">Outdoor</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Site da empresa">Site da empresa</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+          <div class="bio-campo" id="bio-como-descobriu-outros-wrap" hidden>
+            <input id="bio-como-descobriu-outros" type="text" placeholder="Conte-nos como" />
+          </div>
+          <div class="bio-campo">
             <textarea name="detalhes_adicionais" rows="3" placeholder="Detalhes do evento (não obrigatório)"></textarea>
           </div>
           <input type="text" name="website" tabindex="-1" style="display:none;position:absolute" aria-hidden="true" autocomplete="off" />
@@ -118,6 +133,27 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 
   <script>
     import { initForms } from '../scripts/forms';
-    document.addEventListener('DOMContentLoaded', initForms);
+    document.addEventListener('DOMContentLoaded', () => {
+      initForms();
+      const sel = document.getElementById('bio-como-descobriu') as HTMLSelectElement | null;
+      const wrap = document.getElementById('bio-como-descobriu-outros-wrap') as HTMLElement | null;
+      const input = document.getElementById('bio-como-descobriu-outros') as HTMLInputElement | null;
+      const outrosOpt = sel?.querySelector('option[value^="Outros"]') as HTMLOptionElement | null;
+      if (!sel || !wrap || !input || !outrosOpt) return;
+      const sync = () => {
+        const txt = input.value.trim();
+        outrosOpt.value = txt ? txt : 'Outros';
+        if (sel.value === 'Outros' || outrosOpt.selected) sel.value = outrosOpt.value;
+      };
+      const toggle = () => {
+        const isOutros = outrosOpt.selected;
+        wrap.hidden = !isOutros;
+        input.required = isOutros;
+        if (!isOutros) { input.value = ''; outrosOpt.value = 'Outros'; }
+      };
+      sel.addEventListener('change', toggle);
+      input.addEventListener('input', sync);
+      toggle();
+    });
   </script>
 </Base>
