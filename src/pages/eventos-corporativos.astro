@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import WhatsAppWidget from '../components/ui/WhatsAppWidget.astro';
 import config from '../../config.json';
 import '../styles/eventos-corporativos.css';
 const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
@@ -17,6 +18,15 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
     <link rel="stylesheet" href="https://use.typekit.net/cwh2gwf.css" />
     <link rel="preload" href="/fonts/bangkok-sapture.otf" as="font" type="font/otf" crossorigin />
   </Fragment>
+
+<WhatsAppWidget
+  phone={config.whatsapp?.phone}
+  displayName={config.whatsapp?.display_name}
+  avatar={config.whatsapp?.avatar}
+  submitUrl={webhookUrl}
+  project={config.project_slug}
+  showEmpresaField={true}
+/>
 
 <!-- ===================== HEADER ===================== -->
 <header class="site-header" id="cabecalho">

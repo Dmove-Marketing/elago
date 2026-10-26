@@ -10,6 +10,10 @@ interface Props {
   project?: string;
   /** Pergunta o nome da empresa antes do nome (usado na página de eventos corporativos) */
   showEmpresaField?: boolean;
+  /** Lista customizada de tipos de evento. Se não passado, usa `tipoEventoOptions` padrão. */
+  tipoEventoOptionsCustom?: { value: string; label: string }[];
+  /** Rótulo da pergunta de tipo de evento (customizável por página). */
+  tipoEventoLabel?: string;
 }
 
 const {
@@ -19,7 +23,13 @@ const {
   submitUrl = config.forms['lead-form']?.webhooks[0] || '',
   project = config.project_slug || 'landing-page',
   showEmpresaField = false,
+  tipoEventoOptionsCustom,
+  tipoEventoLabel = 'Que tipo de evento você quer celebrar? 🥂',
 } = Astro.props;
+
+const opcoesTipoEvento = tipoEventoOptionsCustom && tipoEventoOptionsCustom.length > 0
+  ? tipoEventoOptionsCustom
+  : tipoEventoOptions;
 
 // Roteiro da conversa: uma pergunta por campo (estilo Captura Web / Voe)
 const fields = [
@@ -29,7 +39,7 @@ const fields = [
   { key: 'nome', type: 'text', label: 'Pra começar, qual é o seu nome? 😊', placeholder: 'Seu nome' },
   { key: 'tel', type: 'phone', label: 'Qual é o seu WhatsApp com DDD?', placeholder: '(11) 99999-9999' },
   { key: 'email', type: 'email', label: 'E o seu e-mail?', placeholder: 'seu@email.com' },
-  { key: 'tipo_evento', type: 'select', label: 'Que tipo de evento você quer celebrar? 🥂', options: tipoEventoOptions },
+  { key: 'tipo_evento', type: 'select', label: tipoEventoLabel, options: opcoesTipoEvento },
   { key: 'data_evento', type: 'date', label: 'Qual é a data prevista do evento? 📅', placeholder: 'dd/mm/aaaa' },
   { key: 'convidados', type: 'number', label: 'E quantos convidados, aproximadamente?', placeholder: 'Ex: 150', chips: ['50', '100', '150', '200', '300'] },
 ];
