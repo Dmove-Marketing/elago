@@ -39,3 +39,29 @@
 .prova-social .cabecalho-secao{margin:0 auto;max-width:780px}
 .prova-social .titulo-secao,
 .prova-social .subtitulo-secao{color:var(--cor-verde)}
+
+/* ESPAÇOS: evitar que o white-space:nowrap dos h3 expanda colunas desigualmente.
+   minmax(0, 1fr) força as 4 colunas a terem a mesma largura, e o h3 passa a
+   quebrar linha quando o texto é longo. */
+#espacos .grid-espacos{grid-template-columns:repeat(4,minmax(0,1fr))}
+#espacos .espaco h3{white-space:normal;line-height:1.08}
+@media (min-width:769px) and (max-width:1200px){
+  #espacos .grid-espacos{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* ESTRUTURA: 7 ícones em duas linhas (4 + 3) centralizados.
+   Flex com flex-wrap permite centralizar a segunda linha automaticamente. */
+#estrutura .grid-eventos{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+  list-style:none;margin:0;padding:0;
+}
+#estrutura .grid-eventos .evento{
+  flex:0 0 calc((100% - 48px) / 4);
+}
+@media (max-width:1024px){
+  #estrutura .grid-eventos .evento{flex:0 0 calc((100% - 16px) / 2)}
+}
+@media (max-width:600px){
+  #estrutura .grid-eventos{gap:10px}
+  #estrutura .grid-eventos .evento{flex:0 0 calc((100% - 10px) / 2)}
+}
