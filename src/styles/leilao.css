@@ -1,0 +1,41 @@
+/* Estilos complementares exclusivos da página /leilao
+   (reutiliza eventos-corporativos.css como base) */
+
+/* Subtítulo (parágrafo descritivo abaixo do título da seção) */
+.subtitulo-secao{
+  margin:14px auto 0;
+  max-width:720px;
+  font-size:clamp(16px,1.4vw,18px);
+  line-height:1.55;
+  color:var(--cor-texto);
+}
+.escuro .subtitulo-secao{color:var(--cor-texto-claro)}
+
+/* CTA dentro do texto-conceito */
+.texto-conceito .btn{margin-top:28px;align-self:flex-start}
+
+/* Carrossel do Conceito (substitui o vídeo) */
+#carrossel-conceito{position:relative}
+.slide-conceito{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  opacity:0;transition:opacity .8s ease-in-out;
+}
+.slide-conceito.ativo{opacity:1}
+.pontos-conceito{
+  position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:2;
+  display:flex;gap:10px;padding:8px 14px;border-radius:999px;
+  background:rgba(30,55,0,.55);backdrop-filter:blur(6px);
+}
+.pontos-conceito button{
+  width:9px;height:9px;border-radius:50%;border:none;cursor:pointer;padding:0;
+  background:rgba(244,240,230,.4);transition:background .3s,transform .3s;
+}
+.pontos-conceito button:hover{background:rgba(244,240,230,.7)}
+.pontos-conceito button.ativo{background:var(--cor-bege);transform:scale(1.25)}
+
+/* Prova social: faixa compacta e centrada */
+.prova-social{background:var(--cor-bege);color:var(--cor-verde);text-align:center}
+.prova-social .cabecalho-secao{margin:0 auto;max-width:780px}
+.prova-social .titulo-secao,
+.prova-social .subtitulo-secao{color:var(--cor-verde)}
