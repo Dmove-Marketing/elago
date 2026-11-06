@@ -1,0 +1,18 @@
+/* Eventos Sociais — complementa eventos-corporativos.css */
+
+/* Seção "Eventos": 5 itens em uma linha no desktop, centralizados quando quebram */
+#eventos .grid-eventos{grid-template-columns:repeat(5,1fr)}
+
+@media (max-width:1100px){
+  #eventos .grid-eventos{display:flex;flex-wrap:wrap;justify-content:center}
+  #eventos .grid-eventos .evento{flex:0 0 calc((100% - 32px) / 3)}
+}
+@media (max-width:760px){
+  #eventos .grid-eventos .evento{flex:0 0 calc((100% - 16px) / 2)}
+}
+@media (max-width:560px){
+  #eventos .grid-eventos .evento{flex:0 0 calc((100% - 10px) / 2)}
+}
+
+/* Endereço na seção de localização */
+.endereco-local{display:block;margin:18px 0 0;font-style:normal;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:var(--cor-texto)}
