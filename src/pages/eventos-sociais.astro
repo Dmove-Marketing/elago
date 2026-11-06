@@ -4,6 +4,7 @@ import WhatsAppWidget from '../components/ui/WhatsAppWidget.astro';
 import config from '../../config.json';
 import '../styles/eventos-corporativos.css';
 import '../styles/eventos-sociais.css';
+import { tipoEventoOptions } from '../scripts/lead-payload';
 const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 
 /**
@@ -40,16 +41,17 @@ const galeria: ItemGaleria[] = [
   { cdn: 'IMG_6006.webp',     local: 'IMG_6006.webp',                   w: 2048, h: 1365, alt: 'Salão do Elago com pista preta e decoração suspensa em formato de flores' },
 ];
 
+// Tipos de evento: lista padrão do preset social (lead-payload.ts) + 3 opções específicas desta página,
+// inseridas antes de "Outros", que continua por último.
+const extrasSocial = [
+  { value: 'Mini wedding',    label: 'Mini wedding' },
+  { value: 'Pre wedding',     label: 'Pré wedding' },
+  { value: 'Sessao de fotos', label: 'Sessão de fotos' },
+];
 const tiposEventoSocial = [
-  { value: 'Casamento',               label: 'Casamento' },
-  { value: 'Mini wedding',            label: 'Mini wedding' },
-  { value: 'Aniversario',             label: 'Aniversário' },
-  { value: 'Festa de 15 anos',        label: 'Festa de 15 anos' },
-  { value: 'Bodas',                   label: 'Bodas' },
-  { value: 'Pre wedding',             label: 'Pré wedding' },
-  { value: 'Sessao de fotos',         label: 'Sessão de fotos' },
-  { value: 'Confraternizacao social', label: 'Confraternização social' },
-  { value: 'Outros',                  label: 'Outros' },
+  ...tipoEventoOptions.filter((t) => t.value !== 'Outros'),
+  ...extrasSocial,
+  ...tipoEventoOptions.filter((t) => t.value === 'Outros'),
 ];
 ---
 
@@ -339,19 +341,11 @@ const tiposEventoSocial = [
         <label for="email">E-mail</label>
         <input id="email" name="email" type="email" autocomplete="email" required>
       </div>
-      <div class="campo inteiro">
+      <div class="campo">
         <label for="tipo_evento">Tipo de celebração</label>
         <select id="tipo_evento" name="tipo_evento" required>
           <option value="" disabled selected>Selecione o tipo de celebração</option>
-          <option value="Casamento">Casamento</option>
-          <option value="Mini wedding">Mini wedding</option>
-          <option value="Aniversario">Aniversário</option>
-          <option value="Festa de 15 anos">Festa de 15 anos</option>
-          <option value="Bodas">Bodas</option>
-          <option value="Pre wedding">Pré wedding</option>
-          <option value="Sessao de fotos">Sessão de fotos</option>
-          <option value="Confraternizacao social">Confraternização social</option>
-          <option value="Outros">Outros</option>
+          {tiposEventoSocial.map((t) => <option value={t.value}>{t.label}</option>)}
         </select>
       </div>
       <div class="campo">
