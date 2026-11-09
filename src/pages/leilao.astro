@@ -7,6 +7,33 @@ import '../styles/leilao.css';
 const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
 const CDN = 'https://media.dmove.com.br/clients/elago/photos';
 
+// Imagens novas da galeria: CDN como fonte principal e cópia local (public/imagens/leilao/) como fallback.
+// Se o CDN falhar, o onerror troca o src pela cópia local (uma única vez).
+const LOCAL = '/imagens/leilao';
+const onError = "this.onerror=null;this.src=this.dataset.fallback";
+type ItemGaleria = { file: string; alt: string; cls?: string; w: number; h: number };
+// Ordem pensada para o grid dense de 4 colunas: 3 blocos de 2 linhas fechando 8 células cada.
+const galeriaNova: ItemGaleria[] = [
+  // bloco 1: grande + 2 altas
+  { file: 'IMG.19.webp', cls: 'g-grande', w: 1536, h: 1024, alt: 'Cavalo apresentado em pista de areia no salão do Elago durante um leilão' },
+  { file: 'IMG.10.webp', cls: 'g-alta',   w: 1025, h: 1534, alt: 'Animal exposto no palco de um leilão, diante de telão com a identidade do evento' },
+  { file: 'IMG.14.webp', cls: 'g-alta',   w: 1024, h: 1536, alt: 'Animal em passarela diante do telão, durante leilão no salão do Elago' },
+  // bloco 2: alta + 2 + alta + 2
+  { file: 'IMG.18.webp', cls: 'g-alta',   w: 1025, h: 1535, alt: 'Peão conduzindo um animal pela rampa de acesso ao palco' },
+  { file: 'IMG.13.webp',                  w: 1536, h: 1024, alt: 'Cavalo apresentado no palco durante leilão, com convidados às mesas' },
+  { file: 'IMG.20.webp',                  w: 1536, h: 1024, alt: 'Plateia no salão do Elago durante o pregão de um leilão' },
+  { file: 'IMG.15.webp', cls: 'g-alta',   w: 1086, h: 1448, alt: 'Baias montadas sob tenda, com piso de areia, para acomodação dos animais' },
+  { file: 'IMG.12.webp',                  w: 1536, h: 1024, alt: 'Salão do Elago com piso de madeira e mobiliário de apoio preparado para evento' },
+  { file: 'IMG.17.webp',                  w: 1536, h: 1024, alt: 'Salão decorado com fardos de feno e arranjos para leilão' },
+  // bloco 3: alta + 4 + alta
+  { file: 'IMG.16.webp', cls: 'g-alta',   w: 1086, h: 1448, alt: 'Telão com a identidade visual de um leilão sobre a pista de areia' },
+  { file: 'IMG.22.webp',                  w: 1536, h: 1024, alt: 'Varanda do Elago com mesas altas e palco ao fundo' },
+  { file: 'IMG.23.webp',                  w: 1536, h: 1024, alt: 'Espaço de showroom com loja montada no Elago' },
+  { file: 'IMG.21.webp', cls: 'g-alta',   w: 1024, h: 1536, alt: 'Peão de costas ajustando o chapéu durante leilão no Elago' },
+  { file: 'IMG.24.webp',                  w: 1536, h: 1024, alt: 'Público assistindo a show no palco da área externa, à noite' },
+  { file: 'IMG.25.webp',                  w: 1536, h: 1024, alt: 'Fachada do Elago à noite com embarcação exposta na área externa' },
+];
+
 const tiposEventoLeilao = [
   { value: 'Leilao',                 label: 'Leilão' },
   { value: 'Dia de campo',           label: 'Dia de campo' },
@@ -38,7 +65,6 @@ const tiposEventoLeilao = [
   avatar={config.whatsapp?.avatar}
   submitUrl={webhookUrl}
   project={config.project_slug}
-  showEmpresaField={true}
   tipoEventoOptionsCustom={tiposEventoLeilao}
   tipoEventoLabel="Que tipo de evento você quer realizar? 🐂"
 />
@@ -71,8 +97,8 @@ const tiposEventoLeilao = [
   <div class="wrap">
     <ul>
       <li style="--i:0"><span>De <strong><span class="contador" data-alvo="50">50</span> a <span class="contador" data-alvo="700">700</span></strong> convidados</span></li>
-      <li style="--i:1"><span>Estacionamento que vira área de apoio</span></li>
-      <li style="--i:2"><span>Gerador e energia inclusos</span></li>
+      <li style="--i:1"><span>Ambientes integrados para diferentes configurações</span></li>
+      <li style="--i:2"><span>Infraestrutura completa</span></li>
     </ul>
   </div>
 </section>
@@ -83,7 +109,7 @@ const tiposEventoLeilao = [
     <div class="texto-conceito reveal">
       <span class="rotulo">Conceito</span>
       <h2 class="titulo-secao">Um complexo que se adapta à operação do agro</h2>
-      <p>Um leilão envolve diversas etapas, da chegada dos animais ao fechamento dos negócios. O Elago reúne a estrutura necessária para essa operação, com salão climatizado, área externa integrada, estacionamento amplo para apoio aos animais e espaço para montagem.</p>
+      <p>Um leilão envolve diversas etapas, da chegada dos animais ao fechamento dos negócios. O Elago reúne a estrutura necessária para essa operação, com salão climatizado, área externa integrada e espaço para montagem.</p>
       <a class="btn btn-contorno" href="#estrutura">Conhecer a estrutura</a>
     </div>
     <div class="moldura-video reveal" data-atraso="1">
@@ -106,34 +132,32 @@ const tiposEventoLeilao = [
   <div class="wrap">
     <div class="cabecalho-secao reveal">
       <span class="rotulo">Espaços</span>
-      <h2 class="titulo-secao">Cada área com uma função<br><span class="frase-nowrap">no dia do leilão</span></h2>
-      <p class="subtitulo-secao">O complexo é dividido em ambientes que podem ser contratados juntos ou separados, conforme o porte e o formato do evento.</p>
-    </div>
+      <h2 class="titulo-secao">Cada área com uma função<br><span class="frase-nowrap">no dia do leilão</span></h2>    </div>
 
     <div class="grid-espacos">
       <article class="espaco reveal">
         <div class="arco"><img src={`${CDN}/_66A1701.webp`} alt="Salão principal do Elago montado para leilão" width="1600" height="1067" loading="lazy" style="object-position:50% 50%"></div>
         <div class="numero">01</div>
         <h3>Salão principal</h3>
-        <p>Capacidade para até 600 pessoas sentadas ou 1.100 em pé, com ambiente climatizado. A estrutura permite realizar o pregão, o almoço e a premiação no mesmo local, sem necessidade de deslocar os convidados.</p>
+        <p>Com capacidade para até 700 convidados, o salão reúne amplitude e versatilidade para receber leilões de diferentes portes. A infraestrutura completa permite integrar as principais etapas do evento, desde o conforto dos convidados até a apresentação dos animais, em um único espaço.</p>
       </article>
       <article class="espaco reveal" data-atraso="1">
         <div class="arco"><img src={`${CDN}/_66A1737.webp`} alt="Área de apoio e estacionamento amplo do Elago" width="1672" height="941" loading="lazy" style="object-position:50% 50%"></div>
         <div class="numero">02</div>
         <h3>Estacionamento e área de apoio</h3>
-        <p>Área ampla, com acesso para carretas e caminhões. Já foi utilizada como espaço de apoio para acomodação de animais durante leilões realizados no Elago.</p>
+        <p>Ambiente adaptável, utilizado como estacionamento exclusivo e área de apoio. Permite o acesso e circulação de caminhões, o desembarque de animais, montagem de baias e a instalação de estruturas complementares, contribuindo com a logística e a organização operacional que antecede o evento.</p>
       </article>
       <article class="espaco reveal" data-atraso="2">
         <div class="arco"><img src={`${CDN}/_66A1719.webp`} alt="Área externa do Elago com espaço para showrooms e exposição" width="1600" height="1067" loading="lazy" style="object-position:50% 50%"></div>
         <div class="numero">03</div>
         <h3>Área externa</h3>
-        <p>Espaço para montagem de showrooms, estandes e exposição de máquinas, equipamentos e implementos. A versatilidade da área permite receber itens de grande porte, como embarcações, já expostas em eventos anteriores.</p>
+        <p>Área externa preparada para atender às diferentes demandas do evento, com espaço para acomodação e preparação dos animais, montagem de estandes ou até exposição de equipamentos do segmento. Uma estrutura que facilita a logística e amplia as possibilidades do leilão.</p>
       </article>
       <article class="espaco reveal" data-atraso="3">
         <div class="arco"><img src={`${CDN}/elago-espaco-casa-exclusiva.webp`} alt="Varanda gourmet e casa exclusiva do Elago" width="1600" height="1067" loading="lazy" style="object-position:50% 50%"></div>
         <div class="numero">04</div>
-        <h3>Varanda gourmet e casa exclusiva</h3>
-        <p>Ambiente reservado para receber compradores, realizar reuniões privadas e conduzir negociações com mais privacidade, fora do salão principal.</p>
+        <h3>Varanda</h3>
+        <p>Capacidade para até 250 pessoas, oferece flexibilidade para diferentes formatos. Cercada pela natureza, permite composições personalizadas para receptivos, exposições de marcas e espaço de convivência, proporcionando um ambiente de interação.</p>
       </article>
     </div>
     <p class="dica-arraste" aria-hidden="true">Arraste para ver os ambientes</p>
@@ -145,37 +169,24 @@ const tiposEventoLeilao = [
   <div class="wrap">
     <div class="cabecalho-secao reveal">
       <span class="rotulo">Estrutura</span>
-      <h2 class="titulo-secao">Estrutura preparada para cada etapa do seu leilão</h2>
-      <p class="subtitulo-secao">A estrutura do Elago acompanha a operação de um leilão do começo ao fim, sem contratação extra e sem improviso.</p>
+      <h2 class="titulo-secao">A estrutura do Elago acompanha a operação do leilão do começo ao fim</h2>
     </div>
     <ul class="grid-eventos">
       <li class="evento reveal">
         <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span>
-        <span>Gerador e energia já inclusos</span>
-      </li>
-      <li class="evento reveal" data-atraso="1">
-        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></span>
-        <span>Acesso para carreta e manobra sem depender da rua</span>
-      </li>
-      <li class="evento reveal" data-atraso="2">
-        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="M3 10h18"/><path d="m16 20 2 2 4-4"/></svg></span>
-        <span>Área de montagem liberada com antecedência</span>
-      </li>
-      <li class="evento reveal" data-atraso="3">
-        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-        <span>Fornecedor livre, traga sua equipe e seu leiloeiro</span>
-      </li>
-      <li class="evento reveal">
-        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></span>
-        <span>Estrutura para transmissão e leilão virtual</span>
+        <span>Gerador e eletricista de apoio inclusos</span>
       </li>
       <li class="evento reveal" data-atraso="1">
         <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m16 20-4-4-4 4"/></svg></span>
-        <span>Salão climatizado</span>
+        <span>Área de montagem ampla e versátil</span>
       </li>
       <li class="evento reveal" data-atraso="2">
-        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg></span>
-        <span>Estacionamento próprio</span>
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></span>
+        <span>Estrutura para transmissão e leilão online</span>
+      </li>
+      <li class="evento reveal" data-atraso="3">
+        <span class="icone-evento"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20h18"/><path d="M3 20 21 8v12"/><path d="M12 14v6"/></svg></span>
+        <span>Rampa de acesso para entrada dos animais ao palco</span>
       </li>
     </ul>
   </div>
@@ -260,6 +271,11 @@ const tiposEventoLeilao = [
       <button class="g-item g-grande" type="button"><img src={`${CDN}/IMG_6497.webp`} alt="Salão montado para leilão com telões e palco" loading="lazy" width="1600" height="1067"></button>
       <button class="g-item g-alta" type="button"><img src={`${CDN}/_MG_7237.webp`} alt="Área de apoio aos animais durante leilão" loading="lazy" width="1067" height="1600" style="object-position:70% 50%"></button>
       <button class="g-item" type="button"><img src={`${CDN}/IMG_6595.webp`} alt="Acesso e logística do Elago para eventos do agro" loading="lazy" width="1600" height="1067"></button>
+      {galeriaNova.map((g) => (
+        <button class={`g-item${g.cls ? ' ' + g.cls : ''}`} type="button">
+          <img src={`${CDN}/${g.file}`} data-fallback={`${LOCAL}/${g.file}`} onerror={onError} alt={g.alt} loading="lazy" width={g.w} height={g.h} />
+        </button>
+      ))}
     </div>
     <div class="pontos-galeria" id="pontos-galeria" aria-hidden="true"></div>
   </div>
@@ -270,8 +286,7 @@ const tiposEventoLeilao = [
   <div class="wrap grid-local">
     <div class="texto-local reveal">
       <span class="rotulo">Localização</span>
-      <h2 class="titulo-secao">A 15 minutos de Rio Preto, com acesso para quem vem de carreta</h2>
-      <p>Em Cedral, às margens da Engenheiro Schmidt, o Elago oferece acesso direto, estacionamento próprio e proximidade com São José do Rio Preto, com espaço para receber eventos de grande porte.</p>
+      <h2 class="titulo-secao">Em Cedral, às margens da Engenheiro Schmidt, o Elago oferece acesso direto, estacionamento próprio e proximidade com São José do Rio Preto, com espaço para receber eventos de grande porte.</h2>
     </div>
     <div class="moldura-mapa reveal" data-atraso="1">
       <div class="mapa">
@@ -297,7 +312,7 @@ const tiposEventoLeilao = [
   <div class="wrap grid-contato">
     <div class="texto-contato reveal">
       <span class="rotulo">Contato</span>
-      <h2 class="titulo-secao">Vamos montar a estrutura do seu leilão?</h2>
+      <h2 class="titulo-secao">Procurando o espaço ideal para o seu próximo leilão?</h2>
       <p>Preencha e receba uma proposta com as configurações possíveis para o seu evento, incluindo capacidade, área de apoio e estrutura necessária.</p>
     </div>
 
@@ -309,12 +324,8 @@ const tiposEventoLeilao = [
       data-success-id="form-orcamento-leilao-ok"
     >
       <div class="campo">
-        <label for="empresa">Nome da empresa</label>
-        <input id="empresa" name="empresa" type="text" autocomplete="organization" required>
-      </div>
-      <div class="campo">
         <label for="nome">Nome</label>
-        <input id="nome" name="nome" type="text" autocomplete="name" required>
+        <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Nome completo" required>
       </div>
       <div class="campo">
         <label for="telefone">Telefone</label>
@@ -324,7 +335,7 @@ const tiposEventoLeilao = [
         <label for="email">E-mail</label>
         <input id="email" name="email" type="email" autocomplete="email" required>
       </div>
-      <div class="campo inteiro">
+      <div class="campo">
         <label for="tipo_evento">Tipo de evento</label>
         <select id="tipo_evento" name="tipo_evento" required>
           <option value="" disabled selected>Selecione o tipo de evento</option>
