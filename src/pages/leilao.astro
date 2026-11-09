@@ -25,12 +25,13 @@ const galeriaNova: ItemGaleria[] = [
   { file: 'IMG.15.webp', cls: 'g-alta',   w: 1086, h: 1448, alt: 'Baias montadas sob tenda, com piso de areia, para acomodação dos animais' },
   { file: 'IMG.12.webp',                  w: 1536, h: 1024, alt: 'Salão do Elago com piso de madeira e mobiliário de apoio preparado para evento' },
   { file: 'IMG.17.webp',                  w: 1536, h: 1024, alt: 'Salão decorado com fardos de feno e arranjos para leilão' },
-  // bloco 3: alta + 4 + alta
-  { file: 'IMG.16.webp', cls: 'g-alta',   w: 1086, h: 1448, alt: 'Telão com a identidade visual de um leilão sobre a pista de areia' },
+  // bloco 3: 2 imagens empilhadas à esquerda, 2 altas no centro, 2 empilhadas à direita
+  // (ordem de preenchimento do grid dense: c1l1, alta c2, alta c3, c4l1, c1l2, c4l2)
   { file: 'IMG.22.webp',                  w: 1536, h: 1024, alt: 'Varanda do Elago com mesas altas e palco ao fundo' },
-  { file: 'IMG.23.webp',                  w: 1536, h: 1024, alt: 'Espaço de showroom com loja montada no Elago' },
+  { file: 'IMG.16.webp', cls: 'g-alta',   w: 1086, h: 1448, alt: 'Telão com a identidade visual de um leilão sobre a pista de areia' },
   { file: 'IMG.21.webp', cls: 'g-alta',   w: 1024, h: 1536, alt: 'Peão de costas ajustando o chapéu durante leilão no Elago' },
   { file: 'IMG.24.webp',                  w: 1536, h: 1024, alt: 'Público assistindo a show no palco da área externa, à noite' },
+  { file: 'IMG.23.webp',                  w: 1536, h: 1024, alt: 'Espaço de showroom com loja montada no Elago' },
   { file: 'IMG.25.webp',                  w: 1536, h: 1024, alt: 'Fachada do Elago à noite com embarcação exposta na área externa' },
 ];
 
@@ -286,7 +287,8 @@ const tiposEventoLeilao = [
   <div class="wrap grid-local">
     <div class="texto-local reveal">
       <span class="rotulo">Localização</span>
-      <h2 class="titulo-secao">Em Cedral, às margens da Engenheiro Schmidt, o Elago oferece acesso direto, estacionamento próprio e proximidade com São José do Rio Preto, com espaço para receber eventos de grande porte.</h2>
+      <h2 class="titulo-secao">A 15 minutos de Rio Preto, com acesso para quem vem de carreta</h2>
+      <p>Em Cedral, às margens da Engenheiro Schmidt, o Elago oferece acesso direto, estacionamento próprio e proximidade com São José do Rio Preto, com espaço para receber eventos de grande porte.</p>
     </div>
     <div class="moldura-mapa reveal" data-atraso="1">
       <div class="mapa">
