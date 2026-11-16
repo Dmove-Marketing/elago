@@ -1,7 +1,7 @@
 import flatpickr from 'flatpickr';
 import { Portuguese } from 'flatpickr/dist/l10n/pt';
 import 'flatpickr/dist/flatpickr.min.css';
-import { keyMap, getPageSource } from './lead-payload';
+import { keyMap, getPageSource, maskBRL } from './lead-payload';
 
 function applyPhoneMask(input: HTMLInputElement) {
   input.addEventListener('input', () => {
@@ -18,6 +18,10 @@ function applyPhoneMask(input: HTMLInputElement) {
   });
 }
 
+function applyCurrencyMask(input: HTMLInputElement) {
+  input.addEventListener('input', () => { input.value = maskBRL(input.value); });
+}
+
 export function initForms() {
   const forms = document.querySelectorAll<HTMLFormElement>('form[data-form-id]');
   forms.forEach((form) => {
@@ -29,6 +33,7 @@ export function initForms() {
     const project = form.dataset.project || window.location.hostname;
 
     form.querySelectorAll<HTMLInputElement>('[name="telefone"]').forEach(applyPhoneMask);
+    form.querySelectorAll<HTMLInputElement>('[name="orcamento"]').forEach(applyCurrencyMask);
 
     form.querySelectorAll<HTMLInputElement>('[data-datepicker]').forEach((input) => {
       flatpickr(input, {

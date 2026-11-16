@@ -3,6 +3,9 @@
 // todo formulário do site envie os mesmos nomes de campo ao webhook.
 export const keyMap: Record<string, string> = {
   nome: 'Nome',
+  sobrenome: 'Sobrenome',
+  orcamento: 'Orçamento previsto',
+  etapa_planejamento: 'Etapa do planejamento',
   email: 'E-mail',
   'e-mail': 'E-mail',
   telefone: 'WhatsApp',
@@ -40,6 +43,20 @@ export const tipoEventoOptions: { value: string; label: string }[] = [
   { value: 'Workshops, Conferencias e Seminarios', label: 'Workshops, Conferências e Seminários' },
   { value: 'Outros',                               label: 'Outros' },
 ];
+
+// Opções de "Etapa do planejamento" — fonte única para formulários e popup de WhatsApp.
+export const etapaPlanejamentoOptions: { value: string; label: string }[] = [
+  { value: 'Apenas pesquisando valores',            label: 'Estou apenas pesquisando valores (ainda não visitei espaços)' },
+  { value: 'Visitando espacos, ainda nao fechar',   label: 'Estou visitando espaços, mas ainda não estou pronto para fechar o evento' },
+  { value: 'Visitando espacos, pronto para fechar', label: 'Estou visitando espaços e pronto para fechar o evento' },
+];
+
+// Máscara de moeda BRL (somente reais): "15000" -> "R$ 15.000"
+export function maskBRL(v: string): string {
+  const d = v.replace(/\D/g, '').replace(/^0+/, '').slice(0, 10);
+  if (!d) return '';
+  return 'R$ ' + d.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
 
 export const trackingParamKeys = [
   'utm_source', 'utm_medium', 'utm_campaign', 'utm_term',

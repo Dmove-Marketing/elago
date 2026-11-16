@@ -1,6 +1,6 @@
 ---
 import config from '../../../config.json';
-import { trackingParamKeys, tipoEventoOptions } from '../../scripts/lead-payload';
+import { trackingParamKeys, tipoEventoOptions, etapaPlanejamentoOptions } from '../../scripts/lead-payload';
 
 interface Props {
   phone?: string;
@@ -37,11 +37,14 @@ const fields = [
     ? [{ key: 'empresa', type: 'text', label: 'Qual é o nome da sua empresa?', placeholder: 'Nome da empresa' }]
     : []),
   { key: 'nome', type: 'text', label: 'Pra começar, qual é o seu nome? 😊', placeholder: 'Seu nome' },
+  { key: 'sobrenome', type: 'text', label: 'E qual é o seu sobrenome?', placeholder: 'Seu sobrenome' },
   { key: 'tel', type: 'phone', label: 'Qual é o seu WhatsApp com DDD?', placeholder: '(11) 99999-9999' },
   { key: 'email', type: 'email', label: 'E o seu e-mail?', placeholder: 'seu@email.com' },
   { key: 'tipo_evento', type: 'select', label: tipoEventoLabel, options: opcoesTipoEvento },
   { key: 'data_evento', type: 'date', label: 'Qual é a data prevista do evento? 📅', placeholder: 'dd/mm/aaaa' },
   { key: 'convidados', type: 'number', label: 'E quantos convidados, aproximadamente?', placeholder: 'Ex: 150', chips: ['50', '100', '150', '200', '300'] },
+  { key: 'orcamento', type: 'currency', label: 'Qual é o orçamento previsto para o evento? 💰', placeholder: 'R$ 0' },
+  { key: 'etapa_planejamento', type: 'select', label: 'Em que etapa do planejamento você está?', options: etapaPlanejamentoOptions },
 ];
 
 const introMessages = [
@@ -232,6 +235,10 @@ const introMessages = [
     if (d.length > 2) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
     return d.length ? `(${d}` : '';
   }
+  function maskBRL(v) {
+    const d = v.replace(/\D/g, '').replace(/^0+/, '').slice(0, 10);
+    return d ? 'R$ ' + d.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+  }
   function maskDate(v) {
     let d = v.replace(/\D/g, '').slice(0, 8);
     if (d.length > 4) return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
@@ -250,6 +257,7 @@ const introMessages = [
       if (d.length < 10) return 'Digite um telefone válido com DDD';
     }
     if (field.type === 'date' && !/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return 'Digite a data no formato dd/mm/aaaa';
+    if (field.type === 'currency' && !/\d/.test(v)) return 'Digite um valor em reais';
     if (field.type === 'number' && !/^\d+\+?$/.test(v)) return 'Digite um número';
     return null;
   }
@@ -271,7 +279,7 @@ const introMessages = [
   function showInput(field) {
     activeField = field;
     inputbar.hidden = false;
-    inputLbl.textContent = field.label.replace(/\s*[😊🥂📅]\s*/g, '');
+    inputLbl.textContent = field.label.replace(/\s*[😊🥂📅💰]\s*/g, '');
     clearError();
 
     const isDate = field.type === 'date';
@@ -305,8 +313,8 @@ const introMessages = [
       el.placeholder = field.placeholder || '';
       if (!isDate) {
         input.type = 'text';
-        input.inputMode = field.type === 'phone' || field.type === 'number' ? 'numeric' : (field.type === 'email' ? 'email' : 'text');
-        input.autocomplete = { nome: 'name', tel: 'tel', email: 'email', empresa: 'organization' }[field.key] || 'off';
+        input.inputMode = field.type === 'phone' || field.type === 'number' || field.type === 'currency' ? 'numeric' : (field.type === 'email' ? 'email' : 'text');
+        input.autocomplete = { nome: 'given-name', sobrenome: 'family-name', tel: 'tel', email: 'email', empresa: 'organization' }[field.key] || 'off';
       }
       setTimeout(() => el.focus({ preventScroll: true }), 100);
     }
@@ -347,6 +355,7 @@ const introMessages = [
   });
   input.addEventListener('input', () => {
     if (activeField?.type === 'phone') input.value = maskPhone(input.value);
+    if (activeField?.type === 'currency') input.value = maskBRL(input.value);
     if (activeField?.type === 'number') input.value = input.value.replace(/\D/g, '').slice(0, 5);
   });
   dateInput.addEventListener('input', () => { dateInput.value = maskDate(dateInput.value); });
@@ -355,7 +364,7 @@ const introMessages = [
   function waMessage() {
     const a = state.answers;
     const tipo = a.tipo_evento?.display || 'meu evento';
-    const parts = [`Olá! Sou ${a.nome?.display || ''}`.trim()];
+    const parts = [`Olá! Sou ${[a.nome?.display, a.sobrenome?.display].filter(Boolean).join(' ')}`.trim()];
     if (a.empresa) parts[0] += `, da empresa ${a.empresa.display}`;
     parts.push(`Gostaria de um orçamento para ${tipo.toLowerCase()}`);
     if (a.data_evento) parts[parts.length - 1] += ` no dia ${a.data_evento.display}`;
@@ -398,10 +407,13 @@ const introMessages = [
     const payload = {
       ...(a.empresa ? { Empresa: a.empresa.value } : {}),
       Nome: a.nome?.value || '',
+      Sobrenome: a.sobrenome?.value || '',
       WhatsApp: a.tel?.value || '',
       'E-mail': a.email?.value || '',
       'Data do evento': a.data_evento?.value || '',
       Convidados: a.convidados?.value || '',
+      'Orçamento previsto': a.orcamento?.value || '',
+      'Etapa do planejamento': a.etapa_planejamento?.value || '',
       'Tipo de evento': a.tipo_evento?.value || '',
       Fonte: pageSource,
       Data: now.toLocaleDateString('pt-BR'),
