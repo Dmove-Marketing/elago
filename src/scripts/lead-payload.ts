@@ -58,6 +58,26 @@ export function maskBRL(v: string): string {
   return 'R$ ' + d.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+// Origem do lead a partir dos UTMs/click IDs. Os valores batem com as opções do campo
+// "Campanha" do Voe (Meta, Google, LinkedIn, YouTube, TikTok, Pinterest). Sem anúncio = "Orgânico".
+export function detectOrigem(tr: Record<string, string>): string {
+  const s = (tr.utm_source || '').toLowerCase();
+  const m = (tr.utm_medium || '').toLowerCase();
+  const organico = /^(social|organic|organico|orgânico|bio|referral|email)$/.test(m) || /bio/.test((tr.utm_content || '').toLowerCase());
+  if (tr.gclid || tr.gbraid || tr.wbraid) return 'Google';
+  if (tr.ttclid) return 'TikTok';
+  if (tr.fbclid) return 'Meta';
+  if (!organico) {
+    if (/^(google|adwords|googleads|google-ads|gads)$/.test(s)) return 'Google';
+    if (/^(meta|facebook|fb|ig|instagram|an|msg|messenger)$/.test(s)) return 'Meta';
+    if (/tiktok/.test(s)) return 'TikTok';
+    if (/linkedin/.test(s)) return 'LinkedIn';
+    if (/youtube/.test(s)) return 'YouTube';
+    if (/pinterest/.test(s)) return 'Pinterest';
+  }
+  return 'Orgânico';
+}
+
 export const trackingParamKeys = [
   'utm_source', 'utm_medium', 'utm_campaign', 'utm_term',
   'utm_content', 'utm_id', 'gclid', 'gbraid', 'wbraid',

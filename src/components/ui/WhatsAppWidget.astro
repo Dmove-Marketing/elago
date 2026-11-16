@@ -396,6 +396,24 @@ const introMessages = [
     await wait(350);
   }
 
+  function detectOrigem(tr) {
+    const s = (tr.utm_source || '').toLowerCase();
+    const m = (tr.utm_medium || '').toLowerCase();
+    const organico = /^(social|organic|organico|orgânico|bio|referral|email)$/.test(m) || /bio/.test((tr.utm_content || '').toLowerCase());
+    if (tr.gclid || tr.gbraid || tr.wbraid) return 'Google';
+    if (tr.ttclid) return 'TikTok';
+    if (tr.fbclid) return 'Meta';
+    if (!organico) {
+      if (/^(google|adwords|googleads|google-ads|gads)$/.test(s)) return 'Google';
+      if (/^(meta|facebook|fb|ig|instagram|an|msg|messenger)$/.test(s)) return 'Meta';
+      if (/tiktok/.test(s)) return 'TikTok';
+      if (/linkedin/.test(s)) return 'LinkedIn';
+      if (/youtube/.test(s)) return 'YouTube';
+      if (/pinterest/.test(s)) return 'Pinterest';
+    }
+    return 'Orgânico';
+  }
+
   async function submitLead() {
     const a = state.answers;
     const trackingRaw = sessionStorage.getItem('dmove_tracking');
@@ -431,6 +449,7 @@ const introMessages = [
     });
     // um campo por sinal de tracking (UTMs, click IDs, Meta CAPI, origem)
     [...trackingParamKeys, 'landing_page', 'referrer'].forEach((k) => { if (tracking[k]) payload[k] = tracking[k]; });
+    payload.origem = detectOrigem(tracking);
 
     try {
       if (submitUrl) {
