@@ -44,19 +44,22 @@ export const tipoEventoOptions: { value: string; label: string }[] = [
   { value: 'Outros',                               label: 'Outros' },
 ];
 
+// Opções de "Orçamento previsto" — fonte única para formulários e popup de WhatsApp.
+export const orcamentoOptions: { value: string; label: string }[] = [
+  { value: 'Até R$ 15 mil', label: 'Até R$ 15 mil' },
+  { value: 'R$ 15–20 mil', label: 'R$ 15–20 mil' },
+  { value: 'R$ 20–25 mil', label: 'R$ 20–25 mil' },
+  { value: 'R$ 25–30 mil', label: 'R$ 25–30 mil' },
+  { value: 'Acima de R$ 30 mil', label: 'Acima de R$ 30 mil' },
+  { value: 'Ainda não defini', label: 'Ainda não defini' },
+];
+
 // Opções de "Etapa do planejamento" — fonte única para formulários e popup de WhatsApp.
 export const etapaPlanejamentoOptions: { value: string; label: string }[] = [
   { value: 'Apenas pesquisando valores',            label: 'Estou apenas pesquisando valores (ainda não visitei espaços)' },
   { value: 'Visitando espacos, ainda nao fechar',   label: 'Estou visitando espaços, mas ainda não estou pronto para fechar o evento' },
   { value: 'Visitando espacos, pronto para fechar', label: 'Estou visitando espaços e pronto para fechar o evento' },
 ];
-
-// Máscara de moeda BRL (somente reais): "15000" -> "R$ 15.000"
-export function maskBRL(v: string): string {
-  const d = v.replace(/\D/g, '').replace(/^0+/, '').slice(0, 10);
-  if (!d) return '';
-  return 'R$ ' + d.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
 
 // Origem do lead a partir dos UTMs/click IDs. Os valores batem com as opções do campo
 // "Campanha" do Voe (Meta, Google, LinkedIn, YouTube, TikTok, Pinterest). Sem anúncio = "Orgânico".

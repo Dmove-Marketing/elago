@@ -113,7 +113,15 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
             <input name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Número de convidados" required />
           </div>
           <div class="bio-campo">
-            <input name="orcamento" type="text" inputmode="numeric" autocomplete="off" placeholder="Orçamento previsto (R$)" required />
+            <select name="orcamento" required>
+              <option value="" disabled selected>Orçamento previsto</option>
+              <option value="Até R$ 15 mil">Até R$ 15 mil</option>
+              <option value="R$ 15–20 mil">R$ 15–20 mil</option>
+              <option value="R$ 20–25 mil">R$ 20–25 mil</option>
+              <option value="R$ 25–30 mil">R$ 25–30 mil</option>
+              <option value="Acima de R$ 30 mil">Acima de R$ 30 mil</option>
+              <option value="Ainda não defini">Ainda não defini</option>
+            </select>
           </div>
           <div class="bio-campo">
             <select name="etapa_planejamento" required>

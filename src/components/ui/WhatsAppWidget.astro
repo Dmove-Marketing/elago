@@ -1,6 +1,6 @@
 ---
 import config from '../../../config.json';
-import { trackingParamKeys, tipoEventoOptions, etapaPlanejamentoOptions } from '../../scripts/lead-payload';
+import { trackingParamKeys, tipoEventoOptions, etapaPlanejamentoOptions, orcamentoOptions } from '../../scripts/lead-payload';
 
 interface Props {
   phone?: string;
@@ -43,7 +43,7 @@ const fields = [
   { key: 'tipo_evento', type: 'select', label: tipoEventoLabel, options: opcoesTipoEvento },
   { key: 'data_evento', type: 'date', label: 'Qual é a data prevista do evento? 📅', placeholder: 'dd/mm/aaaa' },
   { key: 'convidados', type: 'number', label: 'E quantos convidados, aproximadamente?', placeholder: 'Ex: 150', chips: ['50', '100', '150', '200', '300'] },
-  { key: 'orcamento', type: 'currency', label: 'Qual é o orçamento previsto para o evento? 💰', placeholder: 'R$ 0' },
+  { key: 'orcamento', type: 'select', label: 'Qual é o orçamento previsto para o evento? 💰', options: orcamentoOptions },
   { key: 'etapa_planejamento', type: 'select', label: 'Em que etapa do planejamento você está?', options: etapaPlanejamentoOptions },
 ];
 
@@ -235,10 +235,6 @@ const introMessages = [
     if (d.length > 2) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
     return d.length ? `(${d}` : '';
   }
-  function maskBRL(v) {
-    const d = v.replace(/\D/g, '').replace(/^0+/, '').slice(0, 10);
-    return d ? 'R$ ' + d.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
-  }
   function maskDate(v) {
     let d = v.replace(/\D/g, '').slice(0, 8);
     if (d.length > 4) return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
@@ -257,7 +253,6 @@ const introMessages = [
       if (d.length < 10) return 'Digite um telefone válido com DDD';
     }
     if (field.type === 'date' && !/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return 'Digite a data no formato dd/mm/aaaa';
-    if (field.type === 'currency' && !/\d/.test(v)) return 'Digite um valor em reais';
     if (field.type === 'number' && !/^\d+\+?$/.test(v)) return 'Digite um número';
     return null;
   }
@@ -313,7 +308,7 @@ const introMessages = [
       el.placeholder = field.placeholder || '';
       if (!isDate) {
         input.type = 'text';
-        input.inputMode = field.type === 'phone' || field.type === 'number' || field.type === 'currency' ? 'numeric' : (field.type === 'email' ? 'email' : 'text');
+        input.inputMode = field.type === 'phone' || field.type === 'number' ? 'numeric' : (field.type === 'email' ? 'email' : 'text');
         input.autocomplete = { nome: 'given-name', sobrenome: 'family-name', tel: 'tel', email: 'email', empresa: 'organization' }[field.key] || 'off';
       }
       setTimeout(() => el.focus({ preventScroll: true }), 100);
@@ -355,7 +350,6 @@ const introMessages = [
   });
   input.addEventListener('input', () => {
     if (activeField?.type === 'phone') input.value = maskPhone(input.value);
-    if (activeField?.type === 'currency') input.value = maskBRL(input.value);
     if (activeField?.type === 'number') input.value = input.value.replace(/\D/g, '').slice(0, 5);
   });
   dateInput.addEventListener('input', () => { dateInput.value = maskDate(dateInput.value); });
