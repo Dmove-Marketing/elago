@@ -1,7 +1,7 @@
 import flatpickr from 'flatpickr';
 import { Portuguese } from 'flatpickr/dist/l10n/pt';
 import 'flatpickr/dist/flatpickr.min.css';
-import { keyMap, getPageSource, maskBRL } from './lead-payload';
+import { keyMap, getPageSource, maskBRL, detectOrigem } from './lead-payload';
 
 function applyPhoneMask(input: HTMLInputElement) {
   input.addEventListener('input', () => {
@@ -157,6 +157,7 @@ export function initForms() {
       const payload: Record<string, string> = {
         ...capitalizedFields,
         Fonte: fonte,
+        origem: detectOrigem(tracking),
         Data: dateStr,
         'Horário': timeStr,
         'URL da página': window.location.href,
