@@ -12,7 +12,7 @@ npm run scaffold   # Convert HTML files from _html-originais/ to Astro pages
 npm run deploy     # Build + scp dist/ para o servidor configurado em config.json
 ```
 
-**Deploy:** `npm run deploy` — lê `deploy.user`, `deploy.server` e `deploy.remote_path` do `config.json` e envia `dist/` via `scp`. Antes do primeiro deploy, preencha esses campos no `config.json` do projeto. O script aborta com mensagem clara se `deploy.server` estiver vazio.
+**Deploy:** `npm run deploy` — lê `deploy.user`, `deploy.server` e `deploy.remote_path` do `config.json` e envia `dist/` via `scp`. Antes do primeiro deploy, preencha esses campos no `config.json` do projeto. O script aborta com mensagem clara se `deploy.server` estiver vazio. **`deploy.remote_path` deve ser exatamente `/var/www/<dominio>` (sem barra no fim):** `scripts/deploy-domain.mjs` valida isso e aborta o `npm run deploy` e o workflow do GitHub Actions antes do `rsync --delete`. Nunca remova essa validação — uma barra no fim já fez o rsync mirar `/var/www/` e apagar os sites de todos os clientes.
 
 ## Checklist de novo projeto
 
