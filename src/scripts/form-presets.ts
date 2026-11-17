@@ -6,7 +6,7 @@
 // Uma página só escolhe o preset (via config.json > forms.lead-form.preset);
 // nunca redefine campo por campo → nome nunca chega torto no n8n.
 
-import { tipoEventoOptions, etapaPlanejamentoOptions } from './lead-payload';
+import { tipoEventoOptions, etapaPlanejamentoOptions, orcamentoOptions } from './lead-payload';
 
 export interface PresetFieldOption {
   value: string;
@@ -39,6 +39,18 @@ const tipoEvento: PresetField = {
   options: [
     { value: '', label: 'Selecione o tipo de evento', disabled: true, selected: true },
     ...tipoEventoOptions,
+  ],
+};
+
+// —— Campo "Orçamento previsto" ——
+const orcamento: PresetField = {
+  name: 'orcamento',
+  type: 'select',
+  label: 'Orçamento previsto',
+  required: true,
+  options: [
+    { value: '', label: 'Selecione o orçamento previsto', disabled: true, selected: true },
+    ...orcamentoOptions,
   ],
 };
 
@@ -85,7 +97,7 @@ const nucleo: PresetField[] = [
   tipoEvento,
   { name: 'data_evento', type: 'text', label: 'Data do evento',        placeholder: 'dd/mm/aaaa', datepicker: true, required: true },
   { name: 'convidados', type: 'number', label: 'Número de convidados', placeholder: 'Ex: 150',            required: true },
-  { name: 'orcamento', type: 'text',   label: 'Orçamento previsto',    placeholder: 'R$ 0',               required: true },
+  orcamento,
   etapaPlanejamento,
   detalhes,
 ];

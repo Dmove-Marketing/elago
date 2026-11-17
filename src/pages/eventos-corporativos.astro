@@ -404,7 +404,15 @@ const webhookUrl = (config.forms as any)['lead-form-eventos'].webhooks[0];
       </div>
       <div class="campo inteiro">
         <label for="orcamento">Orçamento previsto</label>
-        <input id="orcamento" name="orcamento" type="text" inputmode="numeric" autocomplete="off" placeholder="R$ 0" required>
+        <select id="orcamento" name="orcamento" required>
+          <option value="" disabled selected>Selecione o orçamento previsto</option>
+          <option value="Até R$ 15 mil">Até R$ 15 mil</option>
+          <option value="R$ 15–20 mil">R$ 15–20 mil</option>
+          <option value="R$ 20–25 mil">R$ 20–25 mil</option>
+          <option value="R$ 25–30 mil">R$ 25–30 mil</option>
+          <option value="Acima de R$ 30 mil">Acima de R$ 30 mil</option>
+          <option value="Ainda não defini">Ainda não defini</option>
+        </select>
       </div>
       <div class="campo inteiro">
         <label for="etapa_planejamento">Etapa do planejamento</label>
