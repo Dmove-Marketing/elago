@@ -6,7 +6,7 @@
 // Uma página só escolhe o preset (via config.json > forms.lead-form.preset);
 // nunca redefine campo por campo → nome nunca chega torto no n8n.
 
-import { tipoEventoOptions } from './lead-payload';
+import { tipoEventoOptions, etapaPlanejamentoOptions } from './lead-payload';
 
 export interface PresetFieldOption {
   value: string;
@@ -42,6 +42,19 @@ const tipoEvento: PresetField = {
   ],
 };
 
+// —— Campo "Etapa do planejamento" ——
+const etapaPlanejamento: PresetField = {
+  name: 'etapa_planejamento',
+  type: 'select',
+  label: 'Etapa do planejamento',
+  required: true,
+  full: true,
+  options: [
+    { value: '', label: 'Selecione a etapa do planejamento', disabled: true, selected: true },
+    ...etapaPlanejamentoOptions,
+  ],
+};
+
 // —— Campo "Nome da empresa": só no funil corporativo, sempre 1º ——
 const empresa: PresetField = {
   name: 'empresa',
@@ -65,12 +78,15 @@ const detalhes: PresetField = {
 // Núcleo comum (ordem pensada p/ o grid de 2 colunas fluir em pares:
 // nome|telefone · email|tipo_evento · data|convidados)
 const nucleo: PresetField[] = [
-  { name: 'nome',      type: 'text',   label: 'Nome',                  placeholder: 'Seu nome completo',  required: true },
+  { name: 'nome',      type: 'text',   label: 'Nome',                  placeholder: 'Seu nome',           required: true },
+  { name: 'sobrenome', type: 'text',   label: 'Sobrenome',             placeholder: 'Seu sobrenome',      required: true },
   { name: 'telefone',  type: 'tel',    label: 'Telefone',              placeholder: '(11) 00000-0000',    required: true },
   { name: 'email',     type: 'email',  label: 'E-mail',                placeholder: 'voce@empresa.com.br', required: true },
   tipoEvento,
   { name: 'data_evento', type: 'text', label: 'Data do evento',        placeholder: 'dd/mm/aaaa', datepicker: true, required: true },
   { name: 'convidados', type: 'number', label: 'Número de convidados', placeholder: 'Ex: 150',            required: true },
+  { name: 'orcamento', type: 'text',   label: 'Orçamento previsto',    placeholder: 'R$ 0',               required: true },
+  etapaPlanejamento,
   detalhes,
 ];
 

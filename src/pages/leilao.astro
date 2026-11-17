@@ -326,7 +326,11 @@ const tiposEventoLeilao = [
     >
       <div class="campo">
         <label for="nome">Nome</label>
-        <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Nome completo" required>
+        <input id="nome" name="nome" type="text" autocomplete="given-name" placeholder="Nome" required>
+      </div>
+      <div class="campo">
+        <label for="sobrenome">Sobrenome</label>
+        <input id="sobrenome" name="sobrenome" type="text" autocomplete="family-name" required>
       </div>
       <div class="campo">
         <label for="telefone">Telefone</label>
@@ -357,6 +361,19 @@ const tiposEventoLeilao = [
       <div class="campo">
         <label for="convidados">Número de convidados</label>
         <input id="convidados" name="convidados" type="number" inputmode="numeric" min="1" step="1" placeholder="Ex.: 150" required>
+      </div>
+      <div class="campo">
+        <label for="orcamento">Orçamento previsto</label>
+        <input id="orcamento" name="orcamento" type="text" inputmode="numeric" autocomplete="off" placeholder="R$ 0" required>
+      </div>
+      <div class="campo inteiro">
+        <label for="etapa_planejamento">Etapa do planejamento</label>
+        <select id="etapa_planejamento" name="etapa_planejamento" required>
+          <option value="" disabled selected>Selecione a etapa do planejamento</option>
+          <option value="Apenas pesquisando valores">Estou apenas pesquisando valores (ainda não visitei espaços)</option>
+          <option value="Visitando espacos, ainda nao fechar">Estou visitando espaços, mas ainda não estou pronto para fechar o evento</option>
+          <option value="Visitando espacos, pronto para fechar">Estou visitando espaços e pronto para fechar o evento</option>
+        </select>
       </div>
       <div class="campo inteiro">
         <label for="detalhes_adicionais">Detalhes do evento <span class="hint">(não obrigatório)</span></label>
